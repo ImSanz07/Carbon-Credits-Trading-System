@@ -1,36 +1,37 @@
-import { handleSignOut } from '@/actions/login';
 
 import { auth } from '@/auth';
-import { Button } from '@/components/ui/button';
-import React from 'react'
 import DisplayFarmers from '../components/DisplayFarmers';
+import Hero from '../components/Hero';
+import CarbonEmissions from '../components/CarbonEmissions';
 
 const Dashboard = async () => {
   const session = await auth()
+  const gstin = session?.user?.gstin || '';
   console.log(session?.user);
+
   return (
     <>
-      <div className="w-3/4 mx-auto">
-        <div>MSME Homepage</div>
-        <h2>Welcome, {session?.user?.businessName}!</h2> {/* This should show the business name */}
-        <h3>Contact Person: {session?.user?.contactPerson}</h3> {/* This shows the contact person */}
-        <h3>Contact Number:{session?.user?.phoneNumber}</h3>
-        <h3>Address:{session?.user?.businessAddress}</h3>
-        <h2>Current Emissions:{session?.user?.currentEmissions}</h2>
+      <div className="flex justify-center w-[90%] mx-auto space-x-4 pt-10">
+        {/* Hero component on the left */}
+        <div className="flex-1">
+          <Hero gstin={gstin} />
+        </div>
 
-        <form action={handleSignOut}>
-          <Button type='submit'>
-            Sign Out
-          </Button>
-        </form>
+        {/* DisplayFarmers component on the right */}
+        {/* <div className="flex-1">
+          <DisplayFarmers />
+        </div> */}
+
+        <div className='flex-1'>
+          <CarbonEmissions gstin={gstin}/>
+        </div>
 
       </div>
-      
-      <DisplayFarmers/>
+        
 
       
     </>
-  )
+  );
 }
 
 export default Dashboard

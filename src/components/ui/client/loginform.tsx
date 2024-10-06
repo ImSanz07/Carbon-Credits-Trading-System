@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
+import { Eye,EyeOff } from "lucide-react";
 
 const loginFunctions={
     farmer:FarmerLogin,
@@ -14,6 +15,7 @@ const loginFunctions={
 const LoginPage = () => {
     const router = useRouter();
     const [userType, setUserType] = useState("msme");
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
@@ -86,12 +88,21 @@ const LoginPage = () => {
             />
 
             {/* Password */}
-            <Input
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                required
-            />
+            <div className="relative">
+                <Input
+                    type={passwordVisible ? "text" : "password"} // Toggle between text and password
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                />
+                <button
+                    type="button"
+                    className="absolute right-3 top-2 text-gray-600"
+                    onClick={() => setPasswordVisible(!passwordVisible)} // Toggle password visibility
+                >
+                    {passwordVisible ? <EyeOff /> : <Eye />}
+                </button>
+            </div>
 
             {/* Submit Button */}
             <Button type="submit">Login</Button>

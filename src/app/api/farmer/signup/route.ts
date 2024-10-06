@@ -10,7 +10,7 @@ export async function POST(request:NextRequest) {
 
     try {
         const reqBody = await request.json();
-        const { name, aadharNumber, password } = reqBody;
+        const { name, aadharNumber, password, phoneNumber, fullAddress, state, district, zipCode } = reqBody;
         console.log("request body",reqBody);
 
 
@@ -29,6 +29,14 @@ export async function POST(request:NextRequest) {
             name,
             aadharNumber,
             password:hashedPassword,
+            phoneNumber, 
+            address:{
+                fullAddress,
+                state,
+                district,
+                zipCode,
+            },
+            
         })
         const savedFarmer = await newFarmer.save();
         console.log("Saved user",savedFarmer);

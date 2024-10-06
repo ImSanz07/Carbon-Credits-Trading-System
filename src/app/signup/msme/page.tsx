@@ -1,10 +1,9 @@
 "use client";
 import { Input } from "@/components/ui/input"; // Ensure this component exists in your project
 import axios from 'axios';
-
-import Link from 'next/link'; 
+import Link from 'next/link';
 import { useRouter } from "next/navigation";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const validateGSTIN = (gstin: string): boolean => {
     const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[A-Z0-9]{1}[Z]{1}[A-Z0-9]{1}$/;
@@ -14,14 +13,40 @@ const validateGSTIN = (gstin: string): boolean => {
 
 const SignupPage = () => {
     const router = useRouter()
-    const [error,setError] = useState<string | null>(null)
+    const [error, setError] = useState<string | null>(null)
+    const [statesAndDistricts, setStatesAndDistricts] = useState<{ [key: string]: string[] }>({});
+    const [selectedState, setSelectedState] = useState<string | null>(null);
+    const [districts, setDistricts] = useState<string[]>([]);
 
-    
 
-    const signup = async (event:React.FormEvent<HTMLFormElement>) =>{
+
+    // Fetch states and districts from the backend API
+    useEffect(() => {
+        const fetchStates = async () => {
+            try {
+                const response = await axios.get('/api/states');
+                setStatesAndDistricts(response.data);
+            } catch (error) {
+                console.error('Error fetching states:', error);
+            }
+        };
+        fetchStates();
+    }, []);
+
+
+    const handleStateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedState = event.target.value;
+        setSelectedState(selectedState);
+        setDistricts(statesAndDistricts[selectedState] || []);
+    };
+
+
+
+
+    const signup = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        
+
         const signupData = {
             businessName: formData.get("businessName"),
             gstin: formData.get("gstin"),
@@ -30,26 +55,31 @@ const SignupPage = () => {
             phoneNumber: formData.get("phoneNumber"),
             password: formData.get("password"),
             businessAddress: formData.get("businessAddress"),
+
+            fullAddress: formData.get("fullAddress"),
+            state: formData.get("state"),
+            district: formData.get("district"),
+            zipCode: formData.get("zipCode"),
         };
 
 
         //validation of basic things
-        if (!signupData.businessName || !signupData.gstin || !signupData.contactPerson || !signupData.email || !signupData.phoneNumber || !signupData.password || !signupData.contactPerson ){
+        if (!signupData.businessName || !signupData.gstin || !signupData.contactPerson || !signupData.email || !signupData.phoneNumber || !signupData.password || !signupData.contactPerson) {
             setError("Please provide all details");
             return;
         }
-            
 
-        if (!validateGSTIN(signupData.gstin as string)){
-            setError("GSTIN Number Invalid");
-            return;
-        }
+        //Commented While Testing
+        // if (!validateGSTIN(signupData.gstin as string)) {
+        //     setError("GSTIN Number Invalid");
+        //     return;
+        // }
 
         //Handling API calls with axios
         try {
-            const response = await axios.post("/api/msme/signup",signupData);
+            const response = await axios.post("/api/msme/signup", signupData);
             // Handle successful signup (e.g., redirect to login)
-            if(response.status===201){
+            if (response.status === 201) {
                 setError(null);
                 router.push("/login")
             }
@@ -59,22 +89,17 @@ const SignupPage = () => {
             } else {
                 setError("Error connecting to database: " + (err as Error).message);
             }
-            
+
         }
     };
 
-    
-    
-    
-    
-    
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-md w-96">
                 <h2 className="text-2xl font-bold text-center mb-6">Sign Up (MSME)</h2>
                 {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>} {/* Display error */}
 
-                <form onSubmit={signup} > 
+                <form onSubmit={signup} >
                     {/* Business Name */}
                     <div className="mb-4">
                         <label htmlFor="businessName" className="block text-sm font-medium text-gray-700 mb-1">
@@ -121,6 +146,63 @@ const SignupPage = () => {
                             Business Address
                         </label>
                         <Input type="text" id="businessAddress" name="businessAddress" placeholder="Enter your Business Address" className="border rounded-md w-full py-2 px-3" required />
+                    </div>
+
+
+                    {/* Address Fields */}
+                    <div className="mb-4">
+                        <label htmlFor="fullAddress" className="block text-sm font-medium text-gray-700 mb-1">
+                            Address
+                        </label>
+                        <Input name="fullAddress" type="text" id="fullAddress" placeholder="Enter your Full Address" className="border rounded-md w-full py-2 px-3" required />
+                    </div>
+
+
+                    <div className="mb-4">
+                        <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
+                            State
+                        </label>
+                        <select
+                            name="state"
+                            id="state"
+                            className="border rounded-md w-full py-2 px-3"
+                            value={selectedState || ""}
+                            onChange={handleStateChange}
+                            required
+                        >
+                            <option value="">Select State</option>
+                            {Object.keys(statesAndDistricts).map((state) => (
+                                <option key={state} value={state}>
+                                    {state}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="district" className="block text-sm font-medium text-gray-700 mb-1">
+                            District
+                        </label>
+                        <select
+                            name="district"
+                            id="district"
+                            className="border rounded-md w-full py-2 px-3"
+                            required
+                        >
+                            <option value="">Select District</option>
+                            {districts.map((district) => (
+                                <option key={district} value={district}>
+                                    {district}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-1">
+                            Zip Code
+                        </label>
+                        <Input name="zipCode" type="text" id="zipCode" placeholder="Enter your Zip Code" className="border rounded-md w-full py-2 px-3" required />
                     </div>
 
                     {/* Password */}

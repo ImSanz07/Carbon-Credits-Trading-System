@@ -7,28 +7,37 @@ declare module "next-auth" {
         businessName?:string;
         gstin?: string;
         contactPerson?: string;
-        businessAddress?:string;
         phoneNumber?:string;
         currentEmissions?:Number;
         aadharNumber?: string;
+        state?:string;
+        address?: {
+            fullAddress?: string;
+            state?: string;
+            district?: string;
+            zipCode?: string;
+        };
 
 
     }
 
     interface Session {
-        user: User;
         user:{
             _id?: string;
             businessName?: string;
             gstin?: string;
             contactPerson?: string;
-            businessAddress?: string;
+            address?: {
+                fullAddress?: string;
+                state?: string;
+                district?: string;
+                zipCode?: string;
+            };
             phoneNumber?: string;
             currentEmissions?: Number;
             type: "farmer" | "msme";
             aadharNumber?: string;
-
-
+            state?:string;
         } & DefaultSession['user']
         
     }

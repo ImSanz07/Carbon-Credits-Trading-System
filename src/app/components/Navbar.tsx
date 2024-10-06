@@ -1,4 +1,3 @@
-"use client";
 import React from 'react'
 import { Button } from "@/components/ui/button"
 import Link from 'next/link'
@@ -11,8 +10,9 @@ const Navbar = async () => {
     return (
         <div className='bg-white shadow-xl py-10 m-2 rounded-md flex justify-between items-center'>
             <div>
-                <Link href={"/home"}>
-                    <h1 className='text-2xl ml-10'>
+                {/* Conditional redirection based on user type */}
+                <Link href={session ? (session.user.type === "farmer" ? "/farmer/home" : "/msme/home") : "/home"}>
+                    <h1 className='text-2xl ml-10 cursor-pointer'>
                         Carbon Credits Trading System
                     </h1>
                 </Link>
@@ -53,10 +53,10 @@ const Navbar = async () => {
                         <Link href={"/login"}>
                             <Button>Login</Button>
                         </Link>
-                        <Link href={"/farmer/signup"}>
+                        <Link href={"/signup/farmer"}>
                             <Button>Sign Up (Farmer)</Button>
                         </Link>
-                        <Link href={"/msme/signup"}>
+                        <Link href={"/signup/msme"}>
                             <Button>Sign Up (MSME)</Button>
                         </Link>
                     </>

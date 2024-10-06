@@ -94,10 +94,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 token.businessName=user.businessName;
                 token.contactPerson=user.contactPerson; 
                 token.phoneNumber = user.phoneNumber;
-                token.businessAddress = user.businessAddress; 
                 token.currentEmissions = user.currentEmissions;
-                token.type=user.type; 
                 token.aadharNumber=user.aadharNumber;
+                token.gstin = user.gstin; 
+                token.state=user.address?.state;
+                token.type = user.type || "msme";
 
 
             }
@@ -110,10 +111,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 session.user.businessName = token.businessName?.toString();
                 session.user.contactPerson = token.contactPerson?.toString();
                 session.user.phoneNumber = token.phoneNumber?.toString();
-                session.user.businessAddress = token.businessAddress?.toString();
                 session.user.currentEmissions = token.currentEmissions;
-                session.user.type = token.type?.toString();
+                session.user.type = token.type as "farmer" | "msme";
                 session.user.aadharNumber=token.aadharNumber?.toString();
+                session.user.gstin=token.gstin?.toString();
+                session.user.state=token.state?.toString();
 
             }
             
