@@ -24,28 +24,23 @@ The Carbon Credits Project is a web application designed to facilitate the excha
 
 Follow these instructions to set up and run the project on your local machine.
 
-### Prerequisites
-
-- Node.js (v14 or higher)
-- npm (Node Package Manager)
-- MongoDB (or MongoDB Atlas account)
 
 ### Installation
 
 1. **Clone the repository**:
- ```bash git clone <repository-url> ```
+ ``` git clone <repository-url> ```
 
 2. **Navigate to the project folder**:
-cd <project-folder>
+```cd <project-folder>```
 
 3. **Install the dependencies**:
-npm install
+```npm install```
 
 4. **Create a .env.local file**:
 This file should contain your environment variables, including database credentials and any API keys. 
 
 5. **Run the development server**:
-npm run dev
+```npm run dev```
 
 6. **Access the application**:
 Open your browser and go to http://localhost:3000 to view the application.
