@@ -78,7 +78,7 @@ const CarbonCreditsChart: React.FC<CarbonCreditsChartProps> = ({
     Credits: credit.creditsEarned,
   }));
 
-  console.log("Chart", chartData);
+  // console.log("Chart", chartData);
 
   return (
     <>

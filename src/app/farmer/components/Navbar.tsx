@@ -15,6 +15,9 @@ const FarmerNavbar = () => {
                 <Link href={"/farmer/home"}>
                     <Button>Farmer Dashboard</Button>
                 </Link>
+                <Link href={"/farmer/transactions"}>
+                    <Button>Credits History</Button>
+                </Link>
                 <Link href={"/farmer/profile"}>
                     <Button>Profile</Button>
                 </Link>

@@ -36,7 +36,7 @@ const Hero: React.FC<HeroProps> = ({ gstin }) => {
         <div className=" py-8 px-4 ">
             <div className="container mx-auto">
                 <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl pb-5">
-                    Welcome, <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold  first:mt-0">{msmeInfo.businessName} </h2>
+                    Welcome, <h1 className="scroll-m-20 border-b pb-2 text-3xl font-semibold  first:mt-0">{msmeInfo.businessName} </h1>
                 </h1>
 
                 <p className="text-lg leading-7 [&:not(:first-child)]:mt-2">

@@ -4,7 +4,7 @@ import mongoose, { mongo } from 'mongoose';
 const farmerSchema = new mongoose.Schema({
     name: { type: String, required: true },
     aadharNumber: { type: String, required: true },
-    phoneNumber: { type: String, required: true },
+    phoneNumber: { type: String },
     password: { type: String, required: true },
     carbonCreditsHistory: [{
         month: { type: String, required: true }, // e.g. "2024-09" (year-month format)

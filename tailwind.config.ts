@@ -51,7 +51,10 @@ const config: Config = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},			
+				lightGreenButton: '#89c07e', //Light Green for Button
+				darkGreenButton: '#2a3f3f', //Light Green for Button		
+			 
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

@@ -15,6 +15,9 @@ const MSMENavbar = () => {
                 <Link href={"/msme/marketplace"}>
                     <Button>Carbon Credits Marketplace</Button>
                 </Link>
+                <Link href={"/msme/transactions"}>
+                    <Button>Past Transactions</Button>
+                </Link>
                 <Link href={"/msme/profile"}>
                     <Button>Profile</Button>
                 </Link>

@@ -1,8 +1,7 @@
 
 import { auth } from '@/auth';
-import DisplayFarmers from '../components/DisplayFarmers';
-import Hero from '../components/Hero';
-import CarbonEmissions from '../components/CarbonEmissions';
+import CarbonEmissions from '../../../../components/CarbonEmissions';
+import Hero from '../../../../components/Hero';
 
 const Dashboard = async () => {
   const session = await auth()
@@ -17,10 +16,6 @@ const Dashboard = async () => {
           <Hero gstin={gstin} />
         </div>
 
-        {/* DisplayFarmers component on the right */}
-        {/* <div className="flex-1">
-          <DisplayFarmers />
-        </div> */}
 
         <div className='flex-1'>
           <CarbonEmissions gstin={gstin}/>

@@ -1,3 +1,4 @@
+// app/msme/marketplace/page.tsx
 "use client";
 import React, { useEffect, useState } from 'react';
 import CreditCard from './components/CreditCard';
@@ -9,10 +10,10 @@ interface Credit {
 }
 
 const Marketplace: React.FC = () => {
-    const [credits, setCredits] = useState<Credit[]>([]); // Use the Credit type for the state
+    const [credits, setCredits] = useState<Credit[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const state = "Maharashtra"; // You can get this dynamically from the user's profile or state
+    const state = "Maharashtra"; // Example state
 
     useEffect(() => {
         const fetchCredits = async () => {
@@ -21,7 +22,7 @@ const Marketplace: React.FC = () => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch credits');
                 }
-                const data: Credit[] = await response.json(); // Define that the data returned is of type Credit[]
+                const data: Credit[] = await response.json();
                 setCredits(data);
             } catch (error: any) {
                 console.error('Error fetching credits:', error);
@@ -54,6 +55,8 @@ const Marketplace: React.FC = () => {
                                 title={`District: ${credit.district}`}
                                 description={`Available Credits: ${credit.totalCredits}`}
                                 content={`Invest in carbon credits from ${credit.district}.`}
+                                district={credit.district}
+                                totalCredits={credit.totalCredits} // Pass totalCredits to CreditCard
                             />
                         ))}
                     </div>

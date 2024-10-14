@@ -3,7 +3,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner"
 import { SessionProvider } from "next-auth/react";
 import FarmerNavbar from "./farmer/components/Navbar";
-import MSMENavbar from "./msme/components/Navbar";
+import MSMENavbar from "../../components/Navbar";
 import Navbar from "./components/Navbar";
 import { auth } from '@/auth';
 

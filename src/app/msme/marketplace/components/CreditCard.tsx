@@ -6,6 +6,8 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import React from 'react';
 
@@ -14,9 +16,18 @@ interface CreditCardProps {
     title: string;
     description: string;
     content: string;
+    district: string;
+    totalCredits: number;
 }
 
-const CreditCard: React.FC<CreditCardProps> = ({ title, description, content }) => {
+const CreditCard: React.FC<CreditCardProps> = ({ title, description,content, district,totalCredits }) => {
+    
+    const router = useRouter();
+
+    const handleClick = () => {
+        router.push(`/msme/marketplace/product/${district}?totalCredits=${totalCredits}`);
+    };
+
     return (
         <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
             <CardHeader>
@@ -27,7 +38,10 @@ const CreditCard: React.FC<CreditCardProps> = ({ title, description, content }) 
                 <p className="text-gray-700">{content}</p>
             </CardContent>
             <CardFooter>
-                <p className="text-blue-600 cursor-pointer">Buy Now</p>
+                {/* <p className="text-green-600 cursor-pointer">Buy Now</p> */}
+                
+                    <p onClick={handleClick} className="text-green-600 cursor-pointer">Buy Now</p>
+                
             </CardFooter>
         </Card>
     );

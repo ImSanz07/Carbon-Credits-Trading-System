@@ -55,6 +55,13 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%
   }
+    .bg-custom {
+      background-image: url('/images/homepage-bg.png');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      /* Full viewport height */
+    }
 }
 @layer base {
   * {
@@ -63,4 +70,12 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
 }

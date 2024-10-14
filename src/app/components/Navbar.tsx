@@ -6,13 +6,13 @@ import { handleSignOut } from '@/actions/login';
 
 
 const Navbar = async () => {
-    const session = await auth()  
+    const session = await auth()
     return (
-        <div className='bg-white shadow-xl py-10 m-2 rounded-md flex justify-between items-center'>
+        <div className='bg-[#467750] shadow-xl py-10 m-2 rounded-md flex justify-between items-center'>
             <div>
                 {/* Conditional redirection based on user type */}
                 <Link href={session ? (session.user.type === "farmer" ? "/farmer/home" : "/msme/home") : "/home"}>
-                    <h1 className='text-2xl ml-10 cursor-pointer'>
+                    <h1 className='text-2xl text-white ml-10 cursor-pointer'>
                         Carbon Credits Trading System
                     </h1>
                 </Link>
@@ -51,13 +51,13 @@ const Navbar = async () => {
                 ) : (
                     <>
                         <Link href={"/login"}>
-                            <Button>Login</Button>
+                                <Button className='bg-darkGreenButton hover:bg-lightGreenButton'>Login</Button>
                         </Link>
                         <Link href={"/signup/farmer"}>
-                            <Button>Sign Up (Farmer)</Button>
+                            <Button className='bg-darkGreenButton hover:bg-lightGreenButton'>Sign Up (Farmer)</Button>
                         </Link>
                         <Link href={"/signup/msme"}>
-                            <Button>Sign Up (MSME)</Button>
+                                <Button className='bg-darkGreenButton hover:bg-lightGreenButton'>Sign Up (MSME)</Button>
                         </Link>
                     </>
                 )}

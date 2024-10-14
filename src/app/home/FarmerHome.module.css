@@ -1,0 +1,40 @@
+.container {
+  position: relative;
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white; /* Change text color to white for better contrast */
+}
+
+.overlay {
+  position: absolute;
+  z-index: 1; /* Bring the overlay text in front of the background image */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.heading {
+  font-size: 4rem; /* Big font size for the heading */
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Shadow for better visibility */
+}
+
+.subHeading {
+  font-size: 1.5rem; /* Smaller font size for the subtitle */
+  margin-top: 10px; /* Space between heading and subtitle */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.backgroundImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0; /* Background image behind the overlay */
+  width: 100%;
+  height: 100%;
+}
