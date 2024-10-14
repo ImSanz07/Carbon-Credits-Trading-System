@@ -33,7 +33,7 @@ Follow these instructions to set up and run the project on your local machine.
 ### Installation
 
 1. **Clone the repository**:
- git clone <repository-url>
+ ```bash git clone <repository-url> ```
 
 2. **Navigate to the project folder**:
 cd <project-folder>
