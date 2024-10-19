@@ -7,6 +7,7 @@ export const PUBLIC_ROUTES = [
     '/home',
     '/farmer/signup',
     '/msme/signup',
+    '/images',
 ]
 
 

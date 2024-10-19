@@ -1,11 +1,8 @@
-import { Metadata } from "next";
-import "./globals.css";
-import { Toaster } from "@/components/ui/sonner"
-import { SessionProvider } from "next-auth/react";
-import FarmerNavbar from "./farmer/components/Navbar";
-import MSMENavbar from "../../components/Navbar";
-import Navbar from "./components/Navbar";
 import { auth } from '@/auth';
+import { Toaster } from "@/components/ui/sonner";
+import { Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,16 +21,6 @@ export default async function RootLayout({
       <body>
         {/* Wrap your app with SessionProvider */}
         <SessionProvider>
-          {/* Conditional Navbar Rendering */}
-          {session ? (
-            session.user.type === "farmer" ? (
-              <FarmerNavbar />
-            ) : (
-              <MSMENavbar />
-            )
-          ) : (
-            <Navbar />
-          )}
           {children}
         </SessionProvider>
         <Toaster />

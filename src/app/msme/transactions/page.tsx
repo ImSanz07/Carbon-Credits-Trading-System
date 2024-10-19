@@ -12,7 +12,9 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import moment from 'moment';
+import { Printer } from 'lucide-react';
+import { generatePDF } from '../utils/generateInvoice';
+import { useSession } from 'next-auth/react';
 
 // Define the Transaction interface
 interface Transaction {
@@ -26,11 +28,13 @@ interface Transaction {
 }
 
 const Transactions: React.FC = () => {
+    const { data: session } = useSession();
+    const gstin = session?.user?.gstin || '';
+    
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [totalCreditsBought, setTotalCreditsBought] = useState(0);
-    const router = useRouter();
 
     // Calculate the total credits bought
     useEffect(() => {
@@ -74,6 +78,7 @@ const Transactions: React.FC = () => {
         return <p>{error}</p>;
     }
 
+
     return (
         <div className="flex flex-col items-center pt-10 min-h-screen bg-gray-100">
             <h1 className='text-2xl'>My Transactions</h1>
@@ -92,7 +97,8 @@ const Transactions: React.FC = () => {
                 <TableBody>
                     {transactions.map((transaction) => (
                         <TableRow key={transaction._id}>
-                            <TableCell className="font-medium">{transaction.orderId}</TableCell>
+                            <TableCell className="font-medium">
+                                {transaction.orderId}</TableCell>
                             <TableCell>
                                 {new Date(transaction.dateTime).toLocaleString('en-US', { dateStyle: 'short' })}
                             </TableCell>
@@ -106,6 +112,11 @@ const Transactions: React.FC = () => {
                                 {transaction.creditsBought}
                             </TableCell>
                             <TableCell className="text-right">₹{transaction.amount}</TableCell>
+                            <TableCell className="text-right">
+                                <Button className='bg-gray-600' onClick={() => generatePDF(transaction,gstin)}>
+                                    <Printer/>
+                                </Button>
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

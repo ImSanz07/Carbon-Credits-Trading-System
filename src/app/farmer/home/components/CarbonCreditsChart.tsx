@@ -114,7 +114,7 @@ const CarbonCreditsChart: React.FC<CarbonCreditsChartProps> = ({
                   cursor={false}
                   content={<ChartTooltipContent hideLabel />}
                 />
-                <Bar dataKey="Credits" fill="var(--color-desktop)" radius={8}>
+                <Bar dataKey="Credits" fill="#15803d" radius={8}>
                   <LabelList
                     position="top"
                     offset={12}

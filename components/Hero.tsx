@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface HeroProps {
     gstin: string;
@@ -10,50 +11,59 @@ const Hero: React.FC<HeroProps> = ({ gstin }) => {
     const [msmeInfo, setMsmeInfo] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
     useEffect(() => {
-        const fetchFarmerInfo = async () => {
+        const fetchMsmeInfo = async () => {
             try {
-                const response = await axios.get(
-                    `/api/msme/profile/fetchUserInfo/${gstin}`
-                );
+                const response = await axios.get(`/api/msme/profile/fetchUserInfo/${gstin}`);
                 setMsmeInfo(response.data);
             } catch (err) {
-                setError("Failed to fetch farmer data");
+                setError("Failed to fetch MSME data");
             } finally {
                 setLoading(false);
             }
         };
 
         if (gstin) {
-            fetchFarmerInfo();
+            fetchMsmeInfo();
         }
     }, [gstin]);
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error fetching user info: {error.message}</div>;
+    if (loading) return <HeroSkeleton />;
+    if (error) return <div className="text-red-500">Error fetching user info: {error}</div>;
 
     return (
-        <div className=" py-8 px-4 ">
-            <div className="container mx-auto">
-                <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl pb-5">
-                    Welcome, <h1 className="scroll-m-20 border-b pb-2 text-3xl font-semibold  first:mt-0">{msmeInfo.businessName} </h1>
-                </h1>
-
-                <p className="text-lg leading-7 [&:not(:first-child)]:mt-2">
-                    <span className="text-muted-foreground">Contact Person: </span>
-                    {msmeInfo.contactPerson}
-                </p>
-
-                <p className="text-lg leading-7 [&:not(:first-child)]:mt-2">
-                    <span className="text-muted-foreground">Phone: </span> {msmeInfo.phoneNumber}
-                </p>
-                <p className="text-lg leading-7 [&:not(:first-child)]:mt-2">
-                    <span className="text-muted-foreground">Email:</span> {msmeInfo.email}
-                </p>
-
+        <div className="space-y-4">
+            <h1 className="text-3xl font-bold text-green-800">
+                Welcome, <span className="text-green-600">{msmeInfo.businessName}</span>
+            </h1>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div>
+                    <p className="font-semibold text-green-700">Contact Person</p>
+                    <p>{msmeInfo.contactPerson}</p>
+                </div>
+                <div>
+                    <p className="font-semibold text-green-700">Phone</p>
+                    <p>{msmeInfo.phoneNumber}</p>
+                </div>
+                <div>
+                    <p className="font-semibold text-green-700">Email</p>
+                    <p>{msmeInfo.email}</p>
+                </div>
             </div>
         </div>
     );
 };
+
+const HeroSkeleton = () => (
+    <div className="space-y-4">
+        <Skeleton className="h-10 w-3/4" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+        </div>
+    </div>
+);
 
 export default Hero;

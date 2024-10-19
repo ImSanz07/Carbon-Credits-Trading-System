@@ -26,6 +26,8 @@
     "clsx": "^2.1.1",
     "glpk-ts": "^0.0.11",
     "glpk.js": "^4.0.2",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "lucia": "^3.2.0",
     "lucide-react": "^0.446.0",
     "moment-timezone": "^0.5.46",

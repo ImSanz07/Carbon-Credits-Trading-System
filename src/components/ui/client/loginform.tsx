@@ -105,7 +105,7 @@ const LoginPage = () => {
             </div>
 
             {/* Submit Button */}
-            <Button type="submit">Login</Button>
+            <Button className="bg-green-600" type="submit">Login</Button>
         </form>
     );
 };

@@ -14,10 +14,10 @@ export async function middleware(request:NextRequest){
     console.log(isAuthenticated,nextUrl.pathname);
 
     // Define restricted routes for authenticated users
-    const restrictedRoutes = [LOGIN, "/signup","/home"];
+    const restrictedRoutes = [LOGIN, "/signup", "/home"];
 
 
-    const isPublicRoute=(PUBLIC_ROUTES.find(route=>nextUrl.pathname.startsWith(route)) || nextUrl.pathname===ROOT);
+    const isPublicRoute=(PUBLIC_ROUTES.find(route=>nextUrl.pathname.startsWith(route)) );
     console.log(isPublicRoute);
 
     if(!isAuthenticated && !isPublicRoute){
