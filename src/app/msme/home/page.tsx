@@ -9,6 +9,9 @@ import { ArrowRight, BarChart2, FileText, Settings } from "lucide-react";
 const Dashboard = async () => {
   const session = await auth()
   const gstin = session?.user?.gstin || '';
+  const state = session?.user?.state || '';
+  console.log(state);
+  
 
   return (
     <div className="min-h-screen bg-green-50">
