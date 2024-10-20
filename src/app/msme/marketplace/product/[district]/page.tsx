@@ -11,6 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast"
 import { useSession } from "next-auth/react";
+import { Toaster } from '@/components/ui/sonner';
 
 const ProductPage: React.FC = () => {
     const { toast } = useToast()
@@ -122,6 +123,11 @@ const ProductPage: React.FC = () => {
     };
 
     const handlePaymentSuccess = async (orderId: string, response: any) => {
+        toast({
+            title: "Please wait while we verify your payment...",
+            description: "This may take a few moments.",
+            variant: "default",
+        })
         try {
             const verificationRes = await fetch('/api/verifyOrder', {
                 method: 'POST',
@@ -135,6 +141,7 @@ const ProductPage: React.FC = () => {
             const verificationData = await verificationRes.json();
             if (verificationData.isOk) {
                 await updateDatabase(orderId, response.razorpay_payment_id);
+                
                 router.push('/msme/marketplace/payment/success');
             } else {
                 throw new Error('Payment verification failed');

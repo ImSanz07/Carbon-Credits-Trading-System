@@ -52,23 +52,30 @@ export const generatePDF = async (transaction: Transaction, gstin: string) => {
         doc.text(`Date: ${new Date(transaction.dateTime).toLocaleDateString()}`, 190, 47, { align: "right" });
         doc.text(`Time: ${new Date(transaction.dateTime).toLocaleTimeString()}`, 190, 54, { align: "right" });
 
-        // Transaction details table
+        // Calculating base amount, CGST, and SGST
+        const baseAmount = transaction.amount / 1.18;  // Removing 18% (CGST + SGST)
+        const cgst = baseAmount * 0.09;  // 9% CGST
+        const sgst = baseAmount * 0.09;  // 9% SGST
+
+        
+        
+       // Transaction details table
         doc.autoTable({
             startY: 85,
-            head: [["Description", "HSN/SAC","District", "Quantity", "Rate", "Amount"]],
+            head: [["Description", "HSN/SAC","District", "Quantity", "Rate", "Amount Paid"]],
             body: [
                 [
                     "Carbon Credits",
                     "[HSN_CODE]",
                     transaction.district,
                     transaction.creditsBought.toString(),
-                    `Rs. ${(transaction.amount / transaction.creditsBought).toFixed(2)}`,
+                    `Rs. ${(baseAmount / transaction.creditsBought).toFixed(2)}`,
                     `Rs. ${transaction.amount.toFixed(2)}`
                 ],
-                ["", "", "", "Subtotal", `Rs. ${transaction.amount.toFixed(2)}`],
-                ["", "", "", "CGST (9%)", `Rs. ${(transaction.amount * 0.09).toFixed(2)}`],
-                ["", "", "", "SGST (9%)", `Rs. ${(transaction.amount * 0.09).toFixed(2)}`],
-                ["", "", "", "Total", `Rs. ${(transaction.amount * 1.18).toFixed(2)}`]
+                ["", "", "", "Subtotal", `Rs. ${baseAmount.toFixed(2)}`],
+                ["", "", "", "CGST (9%)", `Rs. ${cgst.toFixed(2)}`],
+                ["", "", "", "SGST (9%)", `Rs. ${sgst.toFixed(2)}`],
+                ["", "", "", "Total", `Rs. ${transaction.amount.toFixed(2)}`] // This is the original total including taxes
             ],
             styles: { fontSize: 9, cellPadding: 5 },
             headStyles: { fillColor: [0, 128, 0], textColor: [255, 255, 255] },
