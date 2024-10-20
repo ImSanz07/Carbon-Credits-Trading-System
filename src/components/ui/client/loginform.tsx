@@ -4,8 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { toast } from "sonner";
 import { Eye,EyeOff } from "lucide-react";
+import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
+
+
 
 const loginFunctions={
     farmer:FarmerLogin,
@@ -23,13 +26,11 @@ const LoginPage = () => {
         const password = formData.get("password") as string;
 
         if (!identifier || !password) {
-            return toast.error("Please Fill all Fields");
+            return toast.error("Please Provide Email & Password");
         }
-
         const toastId = toast.loading("Logging In...");
 
         const loginFunction = loginFunctions[userType];
-        
         
         // Call the selected login function
         const error = await loginFunction(identifier, password);
@@ -41,7 +42,8 @@ const LoginPage = () => {
         if (!error) {
             toast.success("Login Successful", {
                 id: toastId,
-            });
+                
+            })
             // Redirect based on the user type
             if (userType === "farmer") {
                 router.push("/farmer/home");
@@ -51,7 +53,7 @@ const LoginPage = () => {
         } else {
             toast.error(String(error), {
                 id: toastId,
-            });
+            })
         }
 
     }

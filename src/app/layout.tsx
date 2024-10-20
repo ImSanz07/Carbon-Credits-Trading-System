@@ -2,7 +2,8 @@ import { auth } from '@/auth';
 import { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster as Toaster } from "@/components/ui/toaster"
+import { Toaster as ToasterSonner } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,6 +25,7 @@ export default async function RootLayout({
           {children}
         </SessionProvider>
         <Toaster />
+        <ToasterSonner />
       </body>
     </html>
   );

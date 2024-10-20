@@ -1,10 +1,20 @@
+"use client"
 import { handleSignOut } from '@/actions/login'
 import { Button } from '@/components/ui/button'
 import { Leaf, User, ScrollTextIcon, LogOut, Store, StoreIcon } from 'lucide-react'
 import React from 'react'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 const MSMENavbar = () => {
+    const handleSignOutWithToast = async () => {
+    try {
+      await handleSignOut()
+      toast.success('You have successfully signed out.')
+    } catch (error) {
+      toast.error('Failed to sign out. Please try again.')
+    }
+  }
   return (
       <header className="bg-green-700 text-white shadow-md">
           <div className="container h-28 mx-auto px-4 py-4 flex justify-between items-center">
@@ -30,13 +40,15 @@ const MSMENavbar = () => {
                       <ScrollTextIcon className="h-6 w-6" />
 
                   </Link>
-                  <form action={handleSignOut}>
-                      <Button variant="outline" size="sm" className="text-white border-white bg-green-700 hover:bg-white hover:text-green-700 transition:hover duration-75">
-                          <LogOut className="h-4 w-4 mr-2" />
-                          Logout
-                      </Button>
-
-                  </form>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-white border-white bg-green-700 hover:bg-white hover:text-green-700 transition:hover duration-75"
+                    onClick={handleSignOutWithToast}
+                  >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                  </Button>
 
               </nav>
           </div>
