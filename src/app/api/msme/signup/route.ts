@@ -1,8 +1,6 @@
-
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/utils';
 import { MSME } from '@/models/MSME';
-import { error, log } from 'console';
 import bcryptjs from 'bcryptjs';
 
 export async function POST(request: NextRequest) {
@@ -10,10 +8,13 @@ export async function POST(request: NextRequest) {
     try {
 
         const reqBody = await request.json()
-        const { businessName, gstin, contactPerson, email, phoneNumber, password, businessAddress } = reqBody;
+        const { businessName, gstin, contactPerson, email, phoneNumber, password, businessAddress,zipCode,state,district,fullAddress } = reqBody;
+
+        console.log(gstin);
+        
 
         await connectToDatabase();
-        const msme = await MSME.findOne({ businessName })
+        const msme = await MSME.findOne({ gstin })
         if(msme){
             return NextResponse.json({error:"User already exists"},{status:400})
         }
@@ -27,6 +28,12 @@ export async function POST(request: NextRequest) {
             email,
             phoneNumber,
             businessAddress,
+            address:{
+                fullAddress,
+                district,
+                state,
+                zipCode,
+            },
             password: hashedPassword,
         })
 

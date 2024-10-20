@@ -14,9 +14,6 @@ export async function GET(req: NextRequest, { params }: { params: { state: strin
                 $match: { "address.state": state } // Match farmers from the given state
             },
             {
-                $match: { carbonCreditsHistory: { $ne: [] } } // Filter out farmers with empty carbonCreditsHistory
-            },
-            {
                 $project: {
                     district: "$address.district", // Include the district field
                     latestCredit: { $arrayElemAt: ["$carbonCreditsHistory", -1] } // Get the last element of the credits history
@@ -39,13 +36,13 @@ export async function GET(req: NextRequest, { params }: { params: { state: strin
                 }
             }
         ]);
+        // console.log(creditsByDistrict);
+        
 
         if (creditsByDistrict.length === 0) {
             return NextResponse.json({ message: 'No credits found for this state.' }, { status: 404 });
         }
-
-        console.log(creditsByDistrict);
-        
+   
 
         return NextResponse.json(creditsByDistrict, { status: 200 });
     } catch (error) {

@@ -34,7 +34,12 @@ const Marketplace: React.FC = () => {
             try {
                 const response = await fetch(`/api/msme/marketplace/getCreditsByState/${session.user.state}`);
                 if (!response.ok) {
-                    throw new Error('Failed to fetch credits');
+                    if (response.status === 404) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Failed to fetch credits');
+                    } else {
+                        throw new Error('Failed to fetch credits');
+                    }
                 }
                 const data: Credit[] = await response.json();
                 setCredits(data);
@@ -66,11 +71,11 @@ const Marketplace: React.FC = () => {
         </div>;
     }
 
-    if (status === "unauthenticated") {
-        return <div className="text-center py-12">
-            <p className="text-lg text-red-600 font-semibold">Please log in to access the marketplace.</p>
-        </div>;
-    }
+    // if (status === "unauthenticated") {
+    //     return <div className="text-center py-12">
+    //         <p className="text-lg text-red-600 font-semibold">Please log in to access the marketplace.</p>
+    //     </div>;
+    // }
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-green-50 to-white py-8">

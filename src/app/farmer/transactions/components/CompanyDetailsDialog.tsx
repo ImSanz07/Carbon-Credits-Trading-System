@@ -1,25 +1,35 @@
-// components/CompanyDetailsDialog.tsx
-"use client"; // Ensure this file is client-side
+"use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"; // Adjust based on your UI library
 import React, { useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Building, MapPin, Phone, Mail, BarChart2, User } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
-interface Transaction {
-    buyer_gstin: string;
-    orderId: string;
-    creditsSold: number;
-    dateTime: string; // Change to Date if necessary
-    // Add other fields as necessary
+interface CompanyDetails {
+    businessName: string;
+    currentEmissions: number;
+    address: {
+        fullAddress: string;
+        district: string;
+        state: string;
+    };
+    gstin: string;
+    contactPerson: string;
+    phoneNumber: string;
+    email: string;
 }
 
 interface CompanyDetailsDialogProps {
     isOpen: boolean;
     onClose: () => void;
-    gstin: string | null; // Pass the GSTIN instead of the entire transaction
+    gstin: string | null;
 }
 
-const CompanyDetailsDialog: React.FC<CompanyDetailsDialogProps> = ({ isOpen, onClose, gstin }) => {
-    const [companyDetails, setCompanyDetails] = useState<Transaction | null>(null);
+export default function CompanyDetailsDialog({ isOpen, onClose, gstin }: CompanyDetailsDialogProps) {
+    const [companyDetails, setCompanyDetails] = useState<CompanyDetails | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -27,27 +37,17 @@ const CompanyDetailsDialog: React.FC<CompanyDetailsDialogProps> = ({ isOpen, onC
         const fetchCompanyDetails = async () => {
             if (gstin) {
                 setLoading(true);
-                setError(null); // Reset error state
-
+                setError(null);
                 try {
                     const response = await fetch('/api/farmer/fetchCompanyDetails', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ gstin }),
-                    }); // Adjust the API endpoint
-                    if (!response.ok) {
-                        throw new Error("Failed to fetch company details");
-                    }
+                    });
+                    if (!response.ok) throw new Error("Failed to fetch company details");
                     const data = await response.json();
-
-                    console.log(data);
-                    
-                    
-
                     if (data.success) {
-                        setCompanyDetails(data.msmeDetails); // Assuming your API response structure
+                        setCompanyDetails(data.msmeDetails);
                     } else {
                         setError("No company details found");
                     }
@@ -63,69 +63,75 @@ const CompanyDetailsDialog: React.FC<CompanyDetailsDialogProps> = ({ isOpen, onC
         if (isOpen) {
             fetchCompanyDetails();
         } else {
-            setCompanyDetails(null); // Reset when dialog closes
+            setCompanyDetails(null);
         }
     }, [isOpen, gstin]);
 
-    if (loading) {
-        return (
-            <Dialog open={isOpen} onOpenChange={onClose}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Company Details</DialogTitle>
-                    </DialogHeader>
-                    <p>Loading company details...</p>
-                </DialogContent>
-            </Dialog>
-        );
-    }
-
-    if (error) {
-        return (
-            <Dialog open={isOpen} onOpenChange={onClose}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Company Details</DialogTitle>
-                    </DialogHeader>
-                    <p>{error}</p>
-                    <button onClick={onClose} className="mt-4">Close</button>
-                </DialogContent>
-            </Dialog>
-        );
-    }
-
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="p-6 bg-white rounded-lg shadow-lg">
+            <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl text-gray-800">MSME Details</DialogTitle>
+                    <DialogTitle className="text-2xl font-bold text-center">MSME Details</DialogTitle>
                 </DialogHeader>
-                {loading && <p className="text-center text-gray-500">Loading company details...</p>}
-                {error && <p className="text-center text-red-500">{error}</p>}
-                {companyDetails && (
-                    <div className="mt-4">
-                        <p ><strong>Name:</strong> {companyDetails.businessName}</p>
-                        <p ><strong>Current Emissions:</strong> {companyDetails.currentEmissions}</p>
-                        <div>
-                            <p><strong>Business Address:</strong></p>
-                            <p>{companyDetails.address.fullAddress}</p>
-                            <p>{companyDetails.address.district}, {companyDetails.address.state}</p>
-                        </div>
-                        <p ><strong>GSTIN:</strong> {companyDetails.gstin}</p>
-
-                        <DialogHeader>
-                            <DialogTitle className="text-xl mt-4">Contact Information</DialogTitle>
-                        </DialogHeader>
-                        <p ><strong>Contact Person:</strong> {companyDetails.contactPerson}</p>
-                        <p ><strong>Phone Number:</strong> {companyDetails.phoneNumber}</p>
-
-                        {/* Add more details as necessary */}
+                {loading ? (
+                    <div className="space-y-4">
+                        <Skeleton className="h-4 w-[250px]" />
+                        <Skeleton className="h-4 w-[200px]" />
+                        <Skeleton className="h-4 w-[150px]" />
                     </div>
-                )}
-                <button onClick={onClose} className="mt-6 w-full px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-200">Close</button>
+                ) : error ? (
+                    <p className="text-center text-red-500">{error}</p>
+                ) : companyDetails ? (
+                    <div className="mt-4 space-y-4">
+                        <Card className="bg-gradient-to-r from-blue-50 to-green-50">
+                            <CardContent className="flex items-center space-x-4 p-4">
+                                <Building className="h-8 w-8 text-blue-600" />
+                                <div>
+                                    <p className="font-semibold text-lg">{companyDetails.businessName}</p>
+                                    <Badge variant="secondary" className="mt-1">{companyDetails.gstin}</Badge>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardContent className="flex items-center space-x-4 p-4">
+                                <MapPin className="h-6 w-6 text-green-600" />
+                                <div>
+                                    <p className="font-semibold">Business Address</p>
+                                    <p className="text-sm text-gray-600">{companyDetails.address.fullAddress}</p>
+                                    <p className="text-sm text-gray-600">{companyDetails.address.district}, {companyDetails.address.state}</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Card className="bg-gradient-to-r from-red-50 to-orange-50">
+                            <CardContent className="flex items-center space-x-4 p-4">
+                                <BarChart2 className="h-6 w-6 text-red-600" />
+                                <div>
+                                    <p className="font-semibold">Current Emissions</p>
+                                    <p className="text-lg font-bold text-red-600">{companyDetails.currentEmissions} tons CO2e</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardContent className="space-y-3 p-4">
+                                <p className="font-semibold text-lg">Contact Information</p>
+                                <div className="flex items-center space-x-2">
+                                    <User className="h-5 w-5 text-gray-600" />
+                                    <p className="text-sm font-medium">{companyDetails.contactPerson}</p>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <Phone className="h-5 w-5 text-gray-600" />
+                                    <p className="text-sm">{companyDetails.phoneNumber}</p>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <Mail className="h-5 w-5 text-gray-600" />
+                                    <p className="text-sm">{companyDetails.email}</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                ) : null}
+                <Button onClick={onClose} className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white">Close</Button>
             </DialogContent>
         </Dialog>
     );
-};
-
-export default CompanyDetailsDialog;
+}

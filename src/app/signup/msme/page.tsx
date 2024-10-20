@@ -68,6 +68,8 @@ const SignupPage = () => {
             setError("Please provide all details");
             return;
         }
+        console.log(signupData);
+        
 
         //Commented While Testing
         // if (!validateGSTIN(signupData.gstin as string)) {
