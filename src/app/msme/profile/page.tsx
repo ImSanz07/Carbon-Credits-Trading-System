@@ -9,9 +9,6 @@ const Profile = async () => {
 
   return (
     <>
-    <h2>
-        Hello {gstin}
-    </h2>
         <UserInfo gstin={gstin} />
     </>
   )

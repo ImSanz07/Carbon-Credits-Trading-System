@@ -1,7 +1,6 @@
 import { auth } from '@/auth';
 import CarbonCreditsChart from './components/CarbonCreditsChart';
 import CarbonCreditsData from './components/CarbonCreditsData';
-import { Leaf, LogOut, Settings, User } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 
@@ -11,28 +10,6 @@ const Dashboard = async () => {
 
     return (
         <div className="min-h-screen bg-green-50">
-            {/* NAVBAR REMOVED FROM HERE AND PUT INTO COMPONENTS */}
-            {/* <header className="bg-green-700 text-white shadow-md">
-                <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-                    <div className="flex items-center space-x-2">
-                        <Leaf className="h-8 w-8" />
-                        <span className="text-2xl font-bold">Farmer Dashboard</span>
-                    </div>
-                    <nav className="flex items-center space-x-4">
-                        <Link href="/profile" className="hover:text-green-200 transition-colors">
-                            <User className="h-5 w-5" />
-                        </Link>
-                        <Link href="/settings" className="hover:text-green-200 transition-colors">
-                            <Settings className="h-5 w-5" />
-                        </Link>
-                        <Button variant="outline" size="sm" className="text-white border-white hover:bg-green-600">
-                            <LogOut className="h-4 w-4 mr-2" />
-                            Logout
-                        </Button>
-                    </nav>
-                </div>
-            </header> */}
-
             <main className="container mx-auto px-4 py-8">
                 <h1 className="text-3xl font-bold text-green-800 mb-6">Welcome, {session?.user?.name}!</h1>
 
@@ -61,7 +38,10 @@ const Dashboard = async () => {
                     <div className="bg-white rounded-lg shadow-md p-6">
                         <h3 className="text-xl font-semibold text-green-800 mb-4">Quick Actions</h3>
                         <div className="space-y-2">
-                            <Button className="w-full bg-green-600 hover:bg-green-700 text-white">View Carbon Credit History</Button>
+                            <Link href="/farmer/transactions">
+                                <Button className="w-full bg-green-600 hover:bg-green-700 text-white">View Carbon Credit History</Button>
+                            </Link>
+                            
                             <Button className="w-full bg-green-600 hover:bg-green-700 text-white">Request Sensor Maintenance</Button>
                             <Button className="w-full bg-green-600 hover:bg-green-700 text-white">Update Farm Profile</Button>
                         </div>
@@ -77,9 +57,14 @@ const Dashboard = async () => {
                     <div className="bg-white rounded-lg shadow-md p-6">
                         <h3 className="text-xl font-semibold text-green-800 mb-4">Tips & Resources</h3>
                         <ul className="space-y-2 list-disc list-inside">
-                            <li>How to increase soil carbon content</li>
-                            <li>Best practices for sustainable farming</li>
-                            <li>Understanding carbon credit markets</li>
+                            <a href='https://www.newindianexpress.com/lifestyle/spirituality/2022/Apr/30/how-to-raise-soil-organic-content-2447603.html' target="_blank" ><li>How to increase soil carbon content</li></a>
+                            <a href='https://www.drishtiias.com/hindi/daily-updates/daily-news-analysis/sustainable-agriculture-2' target="_blank">
+                                <li>Best practices for sustainable farming</li>
+                            </a>
+                            <a href='https://climatepromise-undp-org.translate.goog/news-and-stories/what-are-carbon-markets-and-why-are-they-important?_x_tr_sl=en&_x_tr_tl=hi&_x_tr_hl=hi&_x_tr_pto=wa' target='_blank'>
+                                <li>Understanding carbon credit markets</li>
+                                </a>
+                            
                         </ul>
                     </div>
                 </div>

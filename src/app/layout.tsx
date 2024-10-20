@@ -1,8 +1,8 @@
 import { auth } from '@/auth';
-import { Toaster } from "@/components/ui/sonner";
 import { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
   title: "Create Next App",
