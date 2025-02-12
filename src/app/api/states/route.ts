@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Define the states and their districts manually
 const statesAndDistricts = {
@@ -41,14 +41,17 @@ const statesAndDistricts = {
 
 
 // API handler to return the states and their districts
-export async function GET(req: NextApiRequest, res: NextResponse) {
+export async function GET(req: NextRequest, res: NextResponse) {
 
     try {
-        return NextResponse.json(statesAndDistricts);   
+        return NextResponse.json(statesAndDistricts);
     } catch (error) {
         console.error("Error fetching farmers:", error);
         return NextResponse.json({ error: "Failed to fetch farmers." }, { status: 500 });
-        
+
     }
-    
+
 }
+
+export const runtime = 'edge'; performance
+export const dynamic = 'force-dynamic';

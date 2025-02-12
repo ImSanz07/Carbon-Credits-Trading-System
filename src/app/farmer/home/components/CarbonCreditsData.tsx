@@ -32,15 +32,20 @@ const CarbonCreditsData: React.FC<CarbonCreditsDataProps> = ({ aadharNumber }) =
             try {
                 const data = await fetchCarbonDataCard(aadharNumber);
                 // Destructure the values from the fetched data
-                setTotalRevenue(data.totalRevenue);
+                const maxRevenue = data.totalRevenue*0.30
+                // setTotalRevenue(data.totalRevenue);
+                setTotalRevenue(maxRevenue);
+
                 setTotalCarbonCreditsIssued(data.totalCreditsIssued);
                 setCurrentCarbonCredits(data.currentCredits);
                 setPercentageChange(data.percentageChange);
 
                 const predictedCredits = predictNextMonthCredits(data.creditsArray); // Use your prediction function
-                const predictedRevenue = predictedCredits * 300; // Assuming 1 credit = Rs 300
+                const predictedRevenue = predictedCredits * 720; // Assuming 1 credit = Rs 720
+                console.log(predictedCredits);
+                
                 setPredictedCredits(predictedCredits);
-                setPredictedRevenue(predictedRevenue);
+                setPredictedRevenue(predictedRevenue*0.30);
             } catch (error) {
                 console.error("Error fetching carbon data:", error);
             } finally {
@@ -65,7 +70,7 @@ const CarbonCreditsData: React.FC<CarbonCreditsDataProps> = ({ aadharNumber }) =
                     {/* Display Total Revenue */}
                     <Card className="shadow-lg rounded-lg" x-chunk="dashboard-01-chunk-0">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                            <CardTitle className="text-sm font-medium">Predicted Income for This Month</CardTitle>
                             <FaRupeeSign className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -106,19 +111,19 @@ const CarbonCreditsData: React.FC<CarbonCreditsDataProps> = ({ aadharNumber }) =
                             <CreditCard className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">₹ 300</div>
+                            <div className="text-2xl font-bold">₹ 720</div>
                             <p className="text-xs text-muted-foreground">+19% from last month</p>
                         </CardContent>
                     </Card>
                     {/* Set these two cards to span two columns */}
                     <Card className="shadow-lg rounded-lg col-span-2 md:col-span-2" x-chunk="dashboard-01-chunk-4">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Predicted Growth</CardTitle>
+                            <CardTitle className="text-sm font-medium">Next Month's Projected Credits</CardTitle>
                             <FaRupeeSign className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">₹{predictedRevenue.toFixed(2)}</div>
-                            <p className="text-xs text-muted-foreground">Predicted credits: {predictedCredits.toFixed(2)}</p>
+                            <div className="text-2xl font-bold">{predictedCredits.toFixed(2)} Credits</div>
+                            <p className="text-xs text-muted-foreground">Predicted income: Rs {predictedRevenue.toFixed(2)}</p>
                         </CardContent>
                     </Card>
                     <Card className="shadow-lg rounded-lg col-span-2 md:col-span-2" x-chunk="dashboard-01-chunk-5">

@@ -7,49 +7,81 @@ interface CarbonCreditsEntry {
     creditsEarned: number;
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
     try {
-        const reqBody = await req.json();
+        const reqBody = await request.json();
         const { aadharNumber, month, creditsEarned } = reqBody;
 
+        if (!aadharNumber || !month || creditsEarned === undefined) {
+            return NextResponse.json(
+                { error: "Missing required fields" },
+                { status: 400 }
+            );
+        }
+
         await connectToDatabase();
-        console.log('Received Aadhar Number:', aadharNumber);
 
         const farmer = await Farmer.findOne({ aadharNumber });
 
         if (!farmer) {
-            return NextResponse.json({ error: "Farmer Not Found" }, { status: 400 });
+            return NextResponse.json(
+                { error: "Farmer Not Found" },
+                { status: 404 }
+            );
         }
 
         // Check if the month already exists in the carbonCreditsHistory array
-        const monthExists = farmer.carbonCreditsHistory.some((entry: CarbonCreditsEntry) => entry.month === month);
+        const monthExists = farmer.carbonCreditsHistory.some(
+            (entry: CarbonCreditsEntry) => entry.month === month
+        );
 
         if (monthExists) {
-            // If the month exists, update the creditsEarned for that month
+            // Update existing month's credits
             await Farmer.updateOne(
-                { aadharNumber: aadharNumber, 'carbonCreditsHistory.month': month },
                 {
-                    $set: { 'carbonCreditsHistory.$.creditsEarned': creditsEarned }
-                }
-            );
-            return NextResponse.json({ message: "Credits updated for existing month" }, { status: 200 });
-        } else {
-            // If the month doesn't exist, push a new entry into the array
-            await Farmer.updateOne(
-                { aadharNumber: aadharNumber },
+                    aadharNumber,
+                    'carbonCreditsHistory.month': month
+                },
                 {
-                    $push: {
-                        carbonCreditsHistory: {
-                            month: month,
-                            creditsEarned: creditsEarned
-                        }
+                    $set: {
+                        'carbonCreditsHistory.$.creditsEarned': creditsEarned
                     }
                 }
             );
-            return NextResponse.json({ message: "Credits added for new month" }, { status: 200 });
+
+            return NextResponse.json({
+                message: "Credits updated for existing month",
+                success: true
+            });
         }
+
+        // Add new month entry
+        await Farmer.updateOne(
+            { aadharNumber },
+            {
+                $push: {
+                    carbonCreditsHistory: {
+                        month,
+                        creditsEarned
+                    }
+                }
+            }
+        );
+
+        return NextResponse.json({
+            message: "Credits added for new month",
+            success: true
+        });
+
     } catch (error) {
         console.error("Error in updating farmer's credits:", error);
-        return NextResponse.json({ error: "An error occurred" }, { status: 500 });
+        return NextResponse.json(
+            { error: "Internal Server Error" },
+            { status: 500 }
+        );
     }
 }
+
+// Enable CORS if needed
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';

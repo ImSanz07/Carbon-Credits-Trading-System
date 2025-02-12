@@ -32,7 +32,8 @@ export const fetchCarbonDataCard = async (aadharNumber: string): Promise<CarbonD
         console.log(creditsArray);
 
         // Calculate total revenue
-        const totalRevenue = creditsArray.reduce((acc, { creditsEarned }) => acc + creditsEarned * 300, 0); // Assuming 1 credit = Rs 300
+        // const totalRevenue = creditsArray.reduce((acc, { creditsEarned }) => acc + creditsEarned * 720, 0); 
+        // Assuming 1 credit = Rs 720
 
         // Calculate total carbon credits issued
         const totalCreditsIssued = creditsArray.reduce((acc, { creditsEarned }) => acc + creditsEarned, 0);
@@ -40,6 +41,7 @@ export const fetchCarbonDataCard = async (aadharNumber: string): Promise<CarbonD
         // Get current carbon credits (from the latest month)
         const latestCredit = creditsArray[creditsArray.length - 1]; // Assuming the latest month is the last in the array
         const currentCredits = latestCredit ? latestCredit.creditsEarned : 0; // Get credits for the latest month or 0 if none
+        const totalRevenue = currentCredits * 720;
 
         // Calculate percentage change
         const previousCredits = creditsArray.length > 1 ? creditsArray[creditsArray.length - 2].creditsEarned : 0; // Get credits for the previous month

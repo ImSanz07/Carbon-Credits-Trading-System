@@ -1,17 +1,41 @@
-import NextAuth, { CredentialsSignin } from "next-auth"
-import Credentials from "next-auth/providers/credentials"
-import { Farmer } from "./models/Farmer";
-import { connectToDatabase } from "./lib/utils";
-import { compare } from "bcryptjs";
-import { MSME } from "./models/MSME";
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import type { DefaultSession } from "next-auth";
+import type { User as DefaultUser } from "next-auth";
+import type { JWT } from "next-auth/jwt";
+
+// Define custom user properties
+interface IUser {
+    _id: string;
+    businessName?: string;
+    contactPerson?: string;
+    phoneNumber?: string;
+    currentEmissions?: number;
+    type: "farmer" | "msme";
+    aadharNumber?: string;
+    gstin?: string;
+    state?: string;
+}
+
+// Extend next-auth types
+declare module "next-auth" {
+    interface Session {
+        user: IUser & DefaultSession["user"];
+    }
+    interface User extends IUser { }
+}
+
+declare module "next-auth/jwt" {
+    interface JWT extends IUser { }
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
-        Credentials({
+        CredentialsProvider({
             id: "farmer-credentials",
-            name:"Credentials",
-            credentials:{
-                aadharNumber:{
+            name: "Farmer Credentials",
+            credentials: {
+                aadharNumber: {
                     label: "Aadhar Number",
                     type: "text",
                 },
@@ -20,34 +44,39 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     type: "password",
                 },
             },
-            authorize: async(credentials)=>{
-                const aadharNumber = credentials.aadharNumber as string|undefined;
-                const password = credentials.password as string|undefined;
-                console.log("User Details:", aadharNumber, password);
+            async authorize(credentials) {
+                try {
+                    if (!credentials?.aadharNumber || !credentials?.password) {
+                        throw new Error("Missing credentials");
+                    }
 
-                if(!aadharNumber||!password) throw new CredentialsSignin("Please Enter Both Details")
+                    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/authenticate`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            userType: "farmer",
+                            identifier: credentials.aadharNumber,
+                            password: credentials.password,
+                        }),
+                    });
 
-                await connectToDatabase()
-                const user = await Farmer.findOne({ aadharNumber })
+                    if (!res.ok) {
+                        const error = await res.json();
+                        throw new Error(error.error || "Authentication failed");
+                    }
 
-                if (!user) throw new CredentialsSignin({ cause: "Invalid Email or Password" })
-                    
-                const isMatch = await compare(password, user.password);
+                    const user = await res.json();
+                    return user as IUser;
 
-                if (!isMatch)
-                    throw new CredentialsSignin({ cause: "Invalid Email or Password" })
-                console.log("User Details:", user);
-                user.type='farmer'
-
-
-                return user
-
-            }
-
+                } catch (error) {
+                    console.error("Authentication error:", error);
+                    return null;
+                }
+            },
         }),
-        Credentials({
+        CredentialsProvider({
             id: "msme-credentials",
-            name: "CredentialsMSME",
+            name: "MSME Credentials",
             credentials: {
                 gstin: {
                     label: "GSTIN",
@@ -58,76 +87,78 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     type: "password",
                 },
             },
-            authorize: async (credentials) => {
-                const gstin = credentials.gstin as string | undefined;
-                const password = credentials.password as string | undefined;
-                console.log("User Details:", gstin,password);
+            async authorize(credentials) {
+                try {
+                    if (!credentials?.gstin || !credentials?.password) {
+                        throw new Error("Missing credentials");
+                    }
 
-                if (!gstin || !password) throw new CredentialsSignin("Please Enter Both Details")
+                    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/authenticate`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            userType: "msme",
+                            identifier: credentials.gstin,
+                            password: credentials.password,
+                        }),
+                    });
 
-                await connectToDatabase()
-                const user = await MSME.findOne({ gstin })
+                    if (!res.ok) {
+                        const error = await res.json();
+                        throw new Error(error.error || "Authentication failed");
+                    }
 
-                if (!user) throw new CredentialsSignin({ cause: "User not exists" })
+                    const user = await res.json();
+                    return user as IUser;
 
-                const isMatch = await compare(password, user.password);
-
-                if (!isMatch)
-                    throw new CredentialsSignin({ cause: "Invalid GSTIN or Password" })
-                
-                console.log("User Details:", user);
-                user.type='msme'
-
-
-                return user
-
-            }
-
+                } catch (error) {
+                    console.error("Authentication error:", error);
+                    return null;
+                }
+            },
         }),
-
-
     ],
-    callbacks:{
-        async jwt({ token, user }) {
-            if(user){
-                token._id=user._id?.toString()
-                token.businessName=user.businessName;
-                token.contactPerson=user.contactPerson; 
+    callbacks: {
+        async jwt({ token, user, trigger }) {
+            if (user) {
+                // Initial sign in
+                if (user._id) {
+                    token._id = user._id;
+                }
+                token.businessName = user.businessName;
+                token.contactPerson = user.contactPerson;
                 token.phoneNumber = user.phoneNumber;
                 token.currentEmissions = user.currentEmissions;
-                token.aadharNumber=user.aadharNumber;
-                token.gstin = user.gstin; 
-                token.state=user.address?.state;
-                token.type = user.type || "msme";
-
-
+                token.aadharNumber = user.aadharNumber;
+                token.gstin = user.gstin;
+                token.state = user.state;
+                token.type = user.type;
             }
-            
-            return token
+            return token;
         },
         async session({ session, token }) {
-            if(token){
-                session.user._id=token._id?.toString();
-                session.user.businessName = token.businessName?.toString();
-                session.user.contactPerson = token.contactPerson?.toString();
-                session.user.phoneNumber = token.phoneNumber?.toString();
-                session.user.currentEmissions = token.currentEmissions;
-                session.user.type = token.type as "farmer" | "msme";
-                session.user.aadharNumber=token.aadharNumber?.toString();
-                session.user.gstin=token.gstin?.toString();
-                session.user.state=token.state?.toString();
-
-            }
-            
-            return session
+            // Send properties to the client
+            session.user = {
+                ...session.user,
+                _id: token._id,
+                businessName: token.businessName,
+                contactPerson: token.contactPerson,
+                phoneNumber: token.phoneNumber,
+                currentEmissions: token.currentEmissions,
+                type: token.type as "farmer" | "msme",
+                aadharNumber: token.aadharNumber,
+                gstin: token.gstin,
+                state: token.state,
+            };
+            return session;
         }
     },
-    
-    
-    session:{
-        strategy:'jwt',
+    pages: {
+        signIn: "/login",
     },
-    pages:{
-        signIn:"/login"
-    }
-})
+    session: {
+        strategy: "jwt",
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+    },
+    debug: process.env.NODE_ENV === "development",
+});

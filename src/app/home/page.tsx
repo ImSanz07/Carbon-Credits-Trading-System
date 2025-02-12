@@ -36,7 +36,7 @@ export default function LandingPage() {
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl text-shadow">
                   Carbon Credits Trading System
                 </h1>
-                <p className="mx-auto max-w-[700px] text-green-100 md:text-xl text-shadow">
+                <p className="mx-auto max-w-[1200px] text-green-100 text-3npm xl text-shadow">
                   Empowering farmers and MSMEs to contribute to a sustainable future through efficient carbon credit trading.
                 </p>
               </div>

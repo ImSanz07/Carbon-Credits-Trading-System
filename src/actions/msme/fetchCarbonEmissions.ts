@@ -1,4 +1,4 @@
-interface Emission {
+export interface Emission {
     emission: number;
     month: string;
 }
@@ -11,6 +11,7 @@ interface UserData {
 
 interface EmissionData {
     emissionsArray: Emission[];
+    percentageChange?: number;
 }
 
 export const fetchCarbonEmissions = async  (gstin: string): Promise<EmissionData>=>{
@@ -39,6 +40,7 @@ export const fetchCarbonEmissions = async  (gstin: string): Promise<EmissionData
 
         return {
             emissionsArray:[],
+            percentageChange:0,
         };
         
     }

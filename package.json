@@ -34,7 +34,7 @@
     "lucia": "^3.2.0",
     "lucide-react": "^0.446.0",
     "moment-timezone": "^0.5.46",
-    "mongoose": "^8.6.3",
+    "mongoose": "^7.0.3",
     "next": "14.2.13",
     "next-auth": "^5.0.0-beta.22",
     "next-themes": "^0.3.0",
