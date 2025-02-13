@@ -1,9 +1,19 @@
 import { NextResponse } from "next/server";
 import Razorpay from "razorpay"
 
+// Add debug logging
+console.log('RAZORPAY_KEY_ID:', process.env.RAZORPAY_KEY_ID);
+console.log('RAZORPAY_SECRET_ID:', process.env.RAZORPAY_SECRET_ID);
+
+// Check if credentials exist before creating instance
+if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_SECRET_ID) {
+    throw new Error('Razorpay credentials are not configured');
+}
+
+
 const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID || "",
-    key_secret: process.env.RAZORPAY_SECRET_ID || "",
+    key_id: process.env.RAZORPAY_KEY_ID ,
+    key_secret: process.env.RAZORPAY_SECRET_ID,
 });
 
 
