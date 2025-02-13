@@ -2,25 +2,53 @@ import { connectToDatabase } from '@/lib/utils';
 import { Farmer } from '@/models/Farmer';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest, { params }: { params: { aadharNumber: string } }){
-    const { aadharNumber } = params;
+// Mark as dynamic since this is a dynamic route with [aadharNumber]
+export const dynamic = 'force-dynamic';
 
-    await connectToDatabase();
+export async function GET(
+    req: NextRequest,
+    { params }: { params: { aadharNumber: string } }
+) {
+    try {
+        // Try to connect to the database
+        await connectToDatabase();
+    } catch (dbError) {
+        console.error("Database connection failed:", dbError);
+        return NextResponse.json(
+            { success: false, error: "Database connection failed" },
+            { status: 503 }
+        );
+    }
 
     try {
-        const farmer = await Farmer.findOne({ aadharNumber: aadharNumber });
-        if (!farmer) {
-            return NextResponse.json({ error: 'Farmer not found' }, { status: 404 });
+        const { aadharNumber } = params;
+
+        if (!aadharNumber) {
+            return NextResponse.json(
+                { success: false, error: "Aadhar number is required" },
+                { status: 400 }
+            );
         }
 
-        return NextResponse.json(farmer, { status: 200 });
-        
+        const farmer = await Farmer.findOne({ aadharNumber: aadharNumber });
+
+        if (!farmer) {
+            return NextResponse.json(
+                { success: false, error: "Farmer not found" },
+                { status: 404 }
+            );
+        }
+
+        return NextResponse.json(
+            { success: true, data: farmer },
+            { status: 200 }
+        );
+
     } catch (error) {
-
-        console.error(error);
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-        
+        console.error("Error fetching farmer details:", error);
+        return NextResponse.json(
+            { success: false, error: "Internal Server Error" },
+            { status: 500 }
+        );
     }
-;
-
 }
