@@ -92,8 +92,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     if (!credentials?.gstin || !credentials?.password) {
                         throw new Error("Missing credentials");
                     }
+                    // const res = await fetch(`${process.env.NEXTAUTH_URL}/api/authenticate`
 
-                    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/authenticate`, {
+                    const res = await fetch(`/api/authenticate`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
