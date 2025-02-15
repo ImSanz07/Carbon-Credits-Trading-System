@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
         await connectToDatabase();
         console.log("Connected to MongoDB");
 
-        
+
         let user;
         if (userType === "farmer") {
             user = await Farmer.findOne({ aadharNumber: identifier })
@@ -36,6 +36,8 @@ export async function POST(req: NextRequest) {
                 { status: 400 }
             );
         }
+
+        console.log("User from DB:", user);
 
         if (!user) {
             return NextResponse.json(
