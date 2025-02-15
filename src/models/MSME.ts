@@ -13,7 +13,7 @@ const msmeSchema = new mongoose.Schema({
         state: { type: String, required: true }, // State
         zipCode: { type: String, required: true }, // Zip Code
     },
-    password: { type: String, required: true },
+    password: { type: String, required: true, select: true },
     carbonCreditPurchases: [{
         amount: { type: Number, required: true },
         date: { type: Date, default: Date.now },

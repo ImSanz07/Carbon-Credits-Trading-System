@@ -18,7 +18,9 @@ export async function POST(req: NextRequest) {
         }
 
         await connectToDatabase();
+        console.log("Connected to MongoDB");
 
+        
         let user;
         if (userType === "farmer") {
             user = await Farmer.findOne({ aadharNumber: identifier })
