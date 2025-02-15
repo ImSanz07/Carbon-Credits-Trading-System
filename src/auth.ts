@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { DefaultSession } from "next-auth";
+export { NextAuth as GET, NextAuth as POST };
 import type { User as DefaultUser } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 
@@ -92,9 +93,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     if (!credentials?.gstin || !credentials?.password) {
                         throw new Error("Missing credentials");
                     }
-                    // const res = await fetch(`${process.env.NEXTAUTH_URL}/api/authenticate`
+                    // 
 
-                    const res = await fetch(`/api/authenticate`, {
+                    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/authenticate`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
@@ -127,7 +128,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     token._id = user._id;
                 }
                 token.businessName = user.businessName;
-                token.farmerName = user.farmerName;
                 token.contactPerson = user.contactPerson;
                 token.phoneNumber = user.phoneNumber;
                 token.currentEmissions = user.currentEmissions ? Number(user.currentEmissions) : undefined;
@@ -143,7 +143,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             session.user = {
                 ...session.user,
                 _id: token._id,
-                farmerName: token.farmerName,
                 businessName: token.businessName,
                 contactPerson: token.contactPerson,
                 phoneNumber: token.phoneNumber,
