@@ -126,9 +126,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     token._id = user._id;
                 }
                 token.businessName = user.businessName;
+                token.farmerName = user.farmerName;
                 token.contactPerson = user.contactPerson;
                 token.phoneNumber = user.phoneNumber;
-                token.currentEmissions = user.currentEmissions;
+                token.currentEmissions = user.currentEmissions ? Number(user.currentEmissions) : undefined;
                 token.aadharNumber = user.aadharNumber;
                 token.gstin = user.gstin;
                 token.state = user.state;
@@ -141,6 +142,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             session.user = {
                 ...session.user,
                 _id: token._id,
+                farmerName: token.farmerName,
                 businessName: token.businessName,
                 contactPerson: token.contactPerson,
                 phoneNumber: token.phoneNumber,

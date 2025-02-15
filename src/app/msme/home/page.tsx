@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, BarChart2, FileText, Settings } from "lucide-react";
 import Link from 'next/link';
-import CarbonEmissions from '../../../../components/CarbonEmissions';
+import CarbonEmissions from '../components/CarbonEmissions';
 import Hero from '../../../../components/Hero';
 import Head from 'next/head';
 

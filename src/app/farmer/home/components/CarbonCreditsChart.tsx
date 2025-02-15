@@ -1,8 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
-
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  XAxis,
+  ResponsiveContainer,
+} from "recharts";
 import {
   Card,
   CardContent,
@@ -17,7 +22,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
 import { fetchCarbonDataCard } from "@/actions/farmer/useCarbonCredits";
 
 const chartConfig = {
@@ -27,14 +31,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export const description = "A bar chart with a label";
-
 interface Credit {
-  creditsEarned: number; // Update to match the model
-  month: string; // Assuming you want to track the month as well
+  creditsEarned: number;
+  month: string;
 }
 
-// Accept creditsArray as a prop
 interface CarbonCreditsChartProps {
   aadharNumber: string;
 }
@@ -64,46 +65,35 @@ const CarbonCreditsChart: React.FC<CarbonCreditsChartProps> = ({
     fetchData();
   }, [aadharNumber]);
 
-  if (loading) {
-    return <div>Loading...</div>; // Show loading state
-  }
+  if (loading)
+    return <div className="text-center text-gray-500">Loading...</div>;
+  if (error)
+    return <div className="text-center text-red-500">Error: {error}</div>;
 
-  if (error) {
-    return <div>Error: {error}</div>; // Handle error state
-  }
-
-  // Map the credits array to the format required by the chart
   const chartData = creditsArray.slice(-10).map((credit) => ({
     month: credit.month,
     Credits: credit.creditsEarned,
   }));
 
-  // console.log("Chart", chartData);
-
   return (
-    <>
-      <div className="mt-10 shadow-lg rounded-lg">
-        <Card>
-          {" "}
-          {/* Set the card width to 75% */}
-          <CardHeader className="h-10">
-            <CardTitle>Bar Chart - Label</CardTitle>
-            <CardDescription>January - June 2024</CardDescription>
-          </CardHeader>
-          <CardContent className="px-2 sm:p-4">
-            {" "}
-            {/* Adjust padding for smaller size */}
-            <ChartContainer config={chartConfig} className="h-[300px] w-full">
+    <div className="mt-10 shadow-lg rounded-lg max-w-4xl mx-auto">
+      <Card className="w-full">
+        <CardHeader className="h-auto text-center">
+          <CardTitle className="text-lg sm:text-xl">
+            Carbon Credits Overview
+          </CardTitle>
+          <CardDescription className="text-sm sm:text-base">
+            Last 6 Months
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="px-4 sm:px-6 py-4">
+          <ChartContainer config={chartConfig} className="h-[300px] w-full">
+            <ResponsiveContainer width="100%" height={300}>
               <BarChart
-                width={100} // Set the width of the chart
-                height={200} // Set the height of the chart
-                accessibilityLayer
                 data={chartData}
-                margin={{
-                  top: 20,
-                }}
+                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
               >
-                <CartesianGrid vertical={false} />
+                <CartesianGrid vertical={false} strokeDasharray="3 3" />
                 <XAxis
                   dataKey="month"
                   tickLine={false}
@@ -111,33 +101,35 @@ const CarbonCreditsChart: React.FC<CarbonCreditsChartProps> = ({
                   axisLine={false}
                 />
                 <ChartTooltip
-                  cursor={false}
+                  cursor={{ fill: "rgba(0, 0, 0, 0.1)" }}
                   content={<ChartTooltipContent hideLabel />}
                 />
-                <Bar dataKey="Credits" fill="#15803d" radius={8}>
+                <Bar dataKey="Credits" fill="#15803d" radius={[8, 8, 0, 0]}>
                   <LabelList
                     position="top"
-                    offset={12}
+                    offset={10}
                     className="fill-foreground"
                     fontSize={12}
                   />
                 </Bar>
               </BarChart>
-            </ChartContainer>
-          </CardContent>
-          <CardFooter className="flex-col items-start gap-2 text-sm">
-            <div className="flex gap-2 font-medium leading-none">
-              {percentageChange !== 0 && ( // Only show percentage change if it's non-zero
-                <p className="text-xs">
-                  {percentageChange > 0 ? "+" : ""}
-                  {percentageChange.toFixed(2)}% from last month
-                </p>
-              )}
-            </div>
-          </CardFooter>
-        </Card>
-      </div>
-    </>
+            </ResponsiveContainer>
+          </ChartContainer>
+        </CardContent>
+        <CardFooter className="flex flex-col items-center gap-2 text-sm pb-4">
+          {percentageChange !== 0 && (
+            <p
+              className={`text-xs font-medium ${
+                percentageChange > 0 ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {percentageChange > 0 ? "+" : ""}
+              {percentageChange.toFixed(2)}% from last month
+            </p>
+          )}
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 

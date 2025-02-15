@@ -2,6 +2,7 @@ import LoginForm from '@/components/ui/client/loginform';
 import Link from 'next/link'; // For navigation, if needed
 
 const LoginPage = async () => {
+  
   return (
     <div className="relative min-h-screen bg-gray-900">
       {/* Background Image */}

@@ -1,13 +1,23 @@
 // /farmer/home/useCarbonCredits.ts
 
 interface Credit {
-    creditsEarned: number; // Update to match the model
-    month: string; // Assuming you want to track the month as well
+    month: string;
+    creditsEarned: number; 
 }
 
 interface UserData {
-    carbonCreditsHistory: Credit[]; // Assuming credits is an array of Credit objects
+    carbonCreditsHistory: Credit[]; 
 }
+
+
+interface ApiResponse {
+    success: boolean;
+    data: {
+        carbonCreditsHistory: Credit[];
+    };
+}
+
+
 
 interface CarbonData {
     totalRevenue: number; // Total revenue calculated
@@ -25,12 +35,17 @@ export const fetchCarbonDataCard = async (aadharNumber: string): Promise<CarbonD
             throw new Error(`Failed to fetch data for Aadhar Number: ${aadharNumber}`);
         }
 
-        const data: UserData = await response.json(); // Type the response as UserData
+        
+        
+        
+        
+        //Used the ApiResponse interface to type the responseJson
+        const responseJson: ApiResponse = await response.json();
 
+       
         // Use creditsEarned from the carbonCreditsHistory
-        const creditsArray: Credit[] = data.carbonCreditsHistory || [];
-        console.log(creditsArray);
-
+        const creditsArray: Credit[] = responseJson.data?.carbonCreditsHistory ?? [];
+ 
         // Calculate total revenue
         // const totalRevenue = creditsArray.reduce((acc, { creditsEarned }) => acc + creditsEarned * 720, 0); 
         // Assuming 1 credit = Rs 720
@@ -50,6 +65,8 @@ export const fetchCarbonDataCard = async (aadharNumber: string): Promise<CarbonD
         const percentageChange = previousCredits > 0
             ? ((currentCredits - previousCredits) / previousCredits) * 100: 0; // If no previous credits, set percentage change to 0
 
+        
+        
 
         return {
             creditsArray,

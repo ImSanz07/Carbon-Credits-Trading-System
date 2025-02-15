@@ -3,6 +3,7 @@ import { compare } from "bcryptjs";
 import { connectToDatabase } from "@/lib/utils";
 import { Farmer } from "@/models/Farmer";
 import { MSME } from "@/models/MSME";
+import { log } from "node:console";
 
 export async function POST(req: NextRequest) {
     try {
@@ -49,11 +50,16 @@ export async function POST(req: NextRequest) {
             );
         }
 
+        console.log("User",user);
+        
+        
+
         // Remove sensitive data before sending response
         const { password: _, ...safeUser } = user;
 
         return NextResponse.json({
             _id: safeUser._id.toString(),
+            farmerName: safeUser.farmerName || null,
             businessName: safeUser.businessName || null,
             contactPerson: safeUser.contactPerson || null,
             phoneNumber: safeUser.phoneNumber || null,
