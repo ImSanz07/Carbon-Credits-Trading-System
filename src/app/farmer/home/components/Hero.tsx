@@ -40,54 +40,58 @@ const Hero: React.FC<HeroProps> = ({ aadhar }) => {
     );
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 p-6 bg-white shadow-lg rounded-lg">
-      <h1 className="text-3xl md:text-4xl font-bold text-green-800 text-center">
-        Welcome, <span className="text-green-600">{farmerInfo?.name}</span>
-      </h1>
+    <div className="container mx-auto py-3">
+      {/* Farmer Info Section */}
+      <div className="mb-8 bg-white rounded-xl p-10 shadow-sm">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h2 className="text-2xl font-bold">
+              Welcome,{" "}
+              <span className="text-green-700">
+                {farmerInfo?.name || "Farmer"}
+              </span>
+            </h2>
+            <p className="text-muted-foreground">
+              Here's your carbon credits summary for today
+            </p>
+          </div>
 
-      {/* Contact Info */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-sm">
-        <InfoCard title="Phone" value={farmerInfo?.phoneNumber} />
-        <InfoCard title="Aadhar Number" value={farmerInfo?.aadharNumber} />
-        <InfoCard
-          title="Recent Carbon Credits"
-          value={
-            farmerInfo?.carbonCreditsHistory?.length
-              ? farmerInfo.carbonCreditsHistory.at(-1).creditsEarned
-              : 0
-          }
-        />
-      </div>
-
-      {/* Address Section */}
-      <div className="border-t pt-6 mt-4 text-center sm:text-left">
-        <h2 className="text-xl font-semibold text-green-800">Address</h2>
-        <p className="text-gray-600">
-          {farmerInfo?.address?.fullAddress || "N/A"}
-        </p>
-        <p className="text-gray-600">
-          {farmerInfo?.address?.district}, {farmerInfo?.address?.state},{" "}
-          {farmerInfo?.address?.zipCode}
-        </p>
+          {/* Contact Info Section */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full md:w-auto">
+            <InfoCard title="Phone" value={farmerInfo?.phoneNumber} />
+            <InfoCard title="Aadhaar Number" value={farmerInfo?.aadharNumber} />
+            <InfoCard
+              title="Recent Carbon Credits"
+              value={
+                farmerInfo?.carbonCreditsHistory?.length
+                  ? farmerInfo.carbonCreditsHistory.at(-1).creditsEarned
+                  : 0
+              }
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
 const InfoCard = ({ title, value }: { title: string; value?: string }) => (
-  <div className="p-4 border rounded-lg shadow-md bg-gray-50 text-center">
-    <p className="font-semibold text-green-700">{title}</p>
-    <p className="text-gray-700">{value || "N/A"}</p>
+  <div className="flex flex-col p-3 bg-green-50 rounded-lg w-full">
+    <span className="text-xs text-muted-foreground">{title}</span>
+    <span className="font-medium text-green-700 ">{value || "N/A"}</span>
   </div>
 );
 
 const HeroSkeleton = () => (
-  <div className="max-w-4xl mx-auto space-y-6 p-6 bg-white shadow-lg rounded-lg">
-    <Skeleton className="h-10 w-3/4 mx-auto rounded-md" />
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <Skeleton className="h-12 w-full rounded-md" />
-      <Skeleton className="h-12 w-full rounded-md" />
-      <Skeleton className="h-12 w-full rounded-md" />
+  <div className="container mx-auto p-6">
+    <div className="mb-8 bg-white rounded-xl p-6 shadow-sm">
+      <Skeleton className="h-8 w-2/3 mb-4" />
+      <Skeleton className="h-4 w-1/2 mb-6" />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <Skeleton className="h-12 w-full rounded-lg" />
+        <Skeleton className="h-12 w-full rounded-lg" />
+        <Skeleton className="h-12 w-full rounded-lg" />
+      </div>
     </div>
   </div>
 );

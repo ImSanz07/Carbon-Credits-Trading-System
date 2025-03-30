@@ -1,19 +1,12 @@
-import { auth } from '@/auth'
-import React from 'react'
-import UserInfo from './components/UserInfo';
+// /app/farmer/profile/page.tsx
+import { auth } from "@/auth";
+import UserInfo from "./components/UserInfo";
 
 const Profile = async () => {
-    const session = await auth()
-    const aadharNumber= session?.user?.aadharNumber || '';
-    
-  return (
-    <>
-          {/* <div>Farmer Profile Page</div>
-          <h2>Welcome, {aadharNumber}!</h2> */}
-          <UserInfo aadharNumber={aadharNumber}/>
+  const session = await auth(); // ✅ This works here in a Server Component
+  const aadharNumber = session?.user?.aadharNumber || "";
 
-    </>
-  )
-}
+  return <UserInfo aadharNumber={aadharNumber} />;
+};
 
-export default Profile
+export default Profile;

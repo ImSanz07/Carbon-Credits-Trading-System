@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "agribot-tqec",
+  "private_key_id": "a1c9002108addb0f641698ec5da75d2f1f94ca02",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCVm1WeY0e5a4bZ\nzFD3Qb7aeyQdFtcXjLvfoJrP5J0O0LLfgilHqgGOqRo+j9YCOHVC51kIaQzNDN1s\ndgaIM281f/pFZV6Ga5KbSLXNVCJE+Ph0ZcQ0IBT5ql4v2lhih3ricf2OtGE+SOct\nY0AC+4p8fffzProZqh4x3Y7Xu4oZS3MNPLDSUlEiHenTI79uRnwsgb6xUIcGi4Mq\nNitOwCzoghkpGBNNdE4z6s9n9QmVdWwMB/2swPULf8rGAWr9qUqws9Vi+A762ojD\ncSQmC08XHGOdDOIQcamZAqo/pxxE0iedtodM7vSPu71+vuVf5U06VF9A/v4bj7Jw\n6b/nOyuHAgMBAAECggEAR5C01j17s/EB4vHf0Ud7+ptpXRjt72/89y6mn8gmcU3Y\nIx7qjEOA1zOBQGgh4ZIMVeLBLkrCOtxql1WmLkUcb6U2nTeujfKrgOi5Pu1+LyxB\n/bworR6jqgKbZ5y1JvzUBbqtpjQXSGorXATcPBED4CWKFKvu7hP4ubXYfM5Tc2Fu\nheA0H+GeJc86owXk1jBLTjNjKaZG9KI+sIuvY6n59k225Z4q4fzoTQGs3fcq21E/\nkMXWvVOGEm56roI2SYHWFZh/8EJu4wnsdYyLr9d3+qdVHAMz/BZqTulXaUQzOZAB\nLZZjSitU6WPnLjS9gXU1+XmuGxSi4AKBXJJEERbV0QKBgQDSESXht0cF6bT2aiJj\nxERZwrMDml7BzxU+pYy7bTT+wAhbKR823G4sTUDhDkqq/uJfjF8cIbrapXMJsC78\nDb5FR0P3VLs7mudNEUVR8ppTLOgaTT8YXUSCRloxiJLx+0ShFsp9Ttbp/Mxb/p4f\nBcxKVijgn6xDR7X0uiLWxeb7PQKBgQC2UdMliFJm6EZ0XQ/+EPRSaIL9Sj86FEHd\nWBsXEwi1h5Px3/xieY0Djq9WgCzrLyUH8SMxgpQDttajWnkshK7PMfQLQXNt/d8V\ne+iwA/Sei5mgcmiDyh6EYvnyrPTN4mANSJZbBq3oqdNVqLq4WqF74zWKxldV8O0V\nPkjTDhD+EwKBgFqBYNza5hK6GmmAWMi7KuexZwdKX0EJQ5H2Kagm6QpJGlCMaxJr\n7lvP/P/59Fmv70BTbjbkoWjKl8G40sVt9mhKyBGrw+9uUfF2W3NvHuZvFqEeXuzU\nYkvum7VzrjvrkioFc8CBUz8E19da4C1lhhsQ/BOrN8DVCKQj/haitV3RAoGABCRt\nyK+FN8NVPnWS1HHsKycmuryCHT6ylGXZD7gl/YHcEaXGJTKfypHmV+/HlXxXugt3\ngjt2Q3NXAxUeJa3KDvkSk2LkTX50IBfVnJIqb6O6VNPkngHsmZNqHGJjmX3oMsUQ\nbXcEYoHhRFP2EhQ1EQyDfeituU0lBdOJcgoixrMCgYAMP/4T5E6oCIQEdiq8HyIr\nee1HeqIsz2DYoehUxhKIxyygiW9KrFqbqmNJ/RiXHqWo0UIqFyV2evwXo0Bwb7/N\nCTLLyBiz2rq2tjZI00tc2bRJdwkh1ek6zBBJ+w6Og/rqBA8PPKkOcWkfHiZKY373\nGbo6T+5g8YMSszl0tRZPhw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "dialogflow-agent@agribot-tqec.iam.gserviceaccount.com",
+  "client_id": "106403448275893093112",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dialogflow-agent%40agribot-tqec.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

@@ -30,6 +30,12 @@ export async function middleware(request:NextRequest){
         return NextResponse.redirect(new URL(redirectUrl, request.url));
     }
 
+    if (request.nextUrl.pathname === "/dialogflow-key.json") {
+        return NextResponse.json({ error: "Access Denied" }, { status: 403 });
+    }
+
+    
+
     // Proceed normally for all other requests
     return NextResponse.next();
 }

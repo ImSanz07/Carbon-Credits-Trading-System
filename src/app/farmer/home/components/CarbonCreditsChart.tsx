@@ -17,7 +17,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -29,7 +28,7 @@ const chartConfig = {
     label: "Carbon Credits",
     color: "hsl(var(--chart-1))",
   },
-} satisfies ChartConfig;
+};
 
 interface Credit {
   creditsEarned: number;
@@ -46,15 +45,15 @@ const CarbonCreditsChart: React.FC<CarbonCreditsChartProps> = ({
   const [loading, setLoading] = useState(true);
   const [creditsArray, setCreditsArray] = useState<Credit[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [percentageChange, setPercentageChange] = useState(0);
+  const [percentageChange, setPercentageChange] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const data = await fetchCarbonDataCard(aadharNumber);
-        setCreditsArray(data.creditsArray);
-        setPercentageChange(data.percentageChange);
+        setCreditsArray(data.creditsArray || []);
+        setPercentageChange(data.percentageChange || 0);
       } catch (error) {
         setError(error instanceof Error ? error.message : "Unknown error");
       } finally {
@@ -65,18 +64,40 @@ const CarbonCreditsChart: React.FC<CarbonCreditsChartProps> = ({
     fetchData();
   }, [aadharNumber]);
 
-  if (loading)
-    return <div className="text-center text-gray-500">Loading...</div>;
-  if (error)
-    return <div className="text-center text-red-500">Error: {error}</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-48">
+        <div className="animate-spin h-8 w-8 border-4 border-green-500 border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
 
-  const chartData = creditsArray.slice(-10).map((credit) => ({
-    month: credit.month,
-    Credits: credit.creditsEarned,
-  }));
+  if (error) {
+    return <div className="text-center text-red-500">Error: {error}</div>;
+  }
+
+  if (!creditsArray || creditsArray.length === 0) {
+    return (
+      <div className="text-center text-gray-500">
+        No carbon credits data available.
+      </div>
+    );
+  }
+
+  const chartData = creditsArray
+    .slice(-10)
+    .map((credit) => ({
+      month: credit?.month || "N/A",
+      Credits: credit?.creditsEarned || 0,
+    }))
+    .filter((data) => data.Credits !== 0);
+
+  const validPercentageChange = isNaN(percentageChange)
+    ? 0
+    : percentageChange.toFixed(2);
 
   return (
-    <div className="mt-10 shadow-lg rounded-lg max-w-4xl mx-auto">
+    <div className="mt-10 shadow-lg rounded-lg mx-auto w-full">
       <Card className="w-full">
         <CardHeader className="h-auto text-center">
           <CardTitle className="text-lg sm:text-xl">
@@ -124,7 +145,7 @@ const CarbonCreditsChart: React.FC<CarbonCreditsChartProps> = ({
               }`}
             >
               {percentageChange > 0 ? "+" : ""}
-              {percentageChange.toFixed(2)}% from last month
+              {validPercentageChange}% from last month
             </p>
           )}
         </CardFooter>

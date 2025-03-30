@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Activity, CreditCard, Users } from "lucide-react";
+import { Activity, CreditCard, TrendingUp, Users } from "lucide-react";
 import { FaRupeeSign } from "react-icons/fa";
 import { fetchCarbonDataCard } from "@/actions/farmer/useCarbonCredits";
 import { predictNextMonthCredits } from "../../utils/linearRegression";
@@ -55,26 +55,33 @@ const CarbonCreditsData: React.FC<CarbonCreditsDataProps> = ({
   }
 
   return (
-    <div className="flex justify-center mt-10 px-4">
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full max-w-7xl">
+    <div className="flex justify-center ">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full">
         {/* Predicted Income */}
         <Card className="shadow-md hover:shadow-xl transition">
-          <CardHeader className="flex items-center justify-between pb-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">
               Predicted Income for This Month
             </CardTitle>
-            <FaRupeeSign className="h-4 w-4 text-muted-foreground" />
+            <TrendingUp className="h-4 w-4 text-green-700" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               ₹{totalRevenue.toLocaleString()}
             </div>
+            <p className="text-xs text-muted-foreground">
+              for{" "}
+              {new Date().toLocaleString("default", {
+                month: "long",
+                year: "numeric",
+              })}
+            </p>
           </CardContent>
         </Card>
 
         {/* Total Carbon Credits Issued */}
         <Card className="shadow-md hover:shadow-xl transition">
-          <CardHeader className="flex items-center justify-between pb-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">
               Total Carbon Credits Issued
             </CardTitle>
@@ -82,12 +89,13 @@ const CarbonCreditsData: React.FC<CarbonCreditsDataProps> = ({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalCarbonCreditsIssued}</div>
+            <p className="text-xs text-muted-foreground">Lifetime issued</p>
           </CardContent>
         </Card>
 
         {/* Current Carbon Credits */}
         <Card className="shadow-md hover:shadow-xl transition">
-          <CardHeader className="flex items-center justify-between pb-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">
               Current Carbon Credits
             </CardTitle>
@@ -96,7 +104,11 @@ const CarbonCreditsData: React.FC<CarbonCreditsDataProps> = ({
           <CardContent>
             <div className="text-2xl font-bold">{currentCarbonCredits}</div>
             {percentageChange !== 0 && (
-              <p className="text-xs text-muted-foreground">
+              <p
+                className={`text-xs ${
+                  percentageChange > 0 ? "text-green-600" : "text-red-600"
+                }`}
+              >
                 {percentageChange > 0 ? "+" : ""}
                 {percentageChange.toFixed(2)}% from last month
               </p>
@@ -106,7 +118,7 @@ const CarbonCreditsData: React.FC<CarbonCreditsDataProps> = ({
 
         {/* Price Per Credit */}
         <Card className="shadow-md hover:shadow-xl transition">
-          <CardHeader className="flex items-center justify-between pb-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">
               Price Per Credit
             </CardTitle>
@@ -114,15 +126,13 @@ const CarbonCreditsData: React.FC<CarbonCreditsDataProps> = ({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">₹ 720</div>
-            <p className="text-xs text-muted-foreground">
-              +19% from last month
-            </p>
+            <p className="text-xs text-green-600">+19% from last month</p>
           </CardContent>
         </Card>
 
         {/* Next Month's Projected Credits */}
         <Card className="shadow-md hover:shadow-xl transition col-span-2">
-          <CardHeader className="flex items-center justify-between pb-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">
               Next Month's Projected Credits
             </CardTitle>
@@ -140,7 +150,7 @@ const CarbonCreditsData: React.FC<CarbonCreditsDataProps> = ({
 
         {/* Current Soil Carbon Level */}
         <Card className="shadow-md hover:shadow-xl transition col-span-2">
-          <CardHeader className="flex items-center justify-between pb-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">
               Current Soil Carbon Level & Other Data
             </CardTitle>
