@@ -47,14 +47,10 @@ const CarbonEmissions: React.FC<CarbonEmissionsProps> = ({
 
       try {
         const data = await fetchCarbonEmissions(gstin);
-        console.log(data);
-
         if (mounted && data.emissionsArray) {
-          // Sort emissions by month if needed
           const sortedEmissions = [...data.emissionsArray].sort(
             (a, b) => new Date(a.month).getTime() - new Date(b.month).getTime()
           );
-
           setEmissionsArray(sortedEmissions);
           setPercentageChange(data.percentageChange || 0);
         }
@@ -125,7 +121,7 @@ const CarbonEmissions: React.FC<CarbonEmissionsProps> = ({
       <circle
         cx={cx}
         cy={cy}
-        r={5}
+        r={6}
         fill={color}
         stroke="white"
         strokeWidth={1}
@@ -133,19 +129,42 @@ const CarbonEmissions: React.FC<CarbonEmissionsProps> = ({
     );
   };
 
+  // Custom Tooltip
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0]?.payload;
+      return (
+        <div className="bg-white shadow-md p-3 rounded-md border border-gray-200">
+          <p className="text-sm font-medium text-gray-700">
+            <span className="font-bold">Month:</span> {data.month}
+          </p>
+          <p className="text-sm text-green-700">
+            <span className="font-bold">Emissions:</span> {data.emissions} tons
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
-    <div className={`w-full h-full flex flex-col ${className || ""}`}>
+    <div
+      className={`w-full h-full flex flex-col px-4 sm:px-6 ${className || ""}`}
+    >
       <div
-        className="flex-grow"
+        className="w-full max-w-full flex-grow min-w-0 overflow-x-auto"
         role="region"
         aria-label="Carbon emissions chart"
       >
-        <ChartContainer config={chartConfig} className="h-[250px]">
-          <ResponsiveContainer width="100%" height="100%">
+        <ChartContainer config={chartConfig} className="h-[280px] sm:h-[350px]">
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+            className="w-full min-w-0"
+          >
             <LineChart
               data={emissionsArray}
-              margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+              margin={{ top: 20, right: 20, left: -10, bottom: 0 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
@@ -160,42 +179,42 @@ const CarbonEmissions: React.FC<CarbonEmissionsProps> = ({
                 width={40}
                 aria-label="Emissions in tons"
               />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "white",
-                  border: "1px solid #cccccc",
-                }}
-                labelStyle={{ fontWeight: "bold" }}
-              />
-
+              <Tooltip content={<CustomTooltip />} />
               <ReferenceLine y={80} stroke="#ef4444" strokeDasharray="3 3" />
               <ReferenceLine y={50} stroke="#eab308" strokeDasharray="3 3" />
               <Line
-                type="linear"
+                type="monotone"
                 dataKey="emissions"
-                stroke="#b3b3b3"
+                stroke="url(#colorGradient)"
                 strokeWidth={4}
-                edgeMode={"center"}
                 dot={<CustomDot />}
                 connectNulls
               />
+              <defs>
+                <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#16a34a" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#10b981" stopOpacity={0.6} />
+                </linearGradient>
+              </defs>
             </LineChart>
           </ResponsiveContainer>
         </ChartContainer>
       </div>
-      <div className="mt-4 flex justify-between items-center text-sm">
+
+      {/* Summary Section */}
+      <div className="mt-4 flex flex-col sm:flex-row justify-between items-center text-sm">
         <span className="font-medium text-green-800">
-          Total: {totalEmissions} tons
+          Total Emissions: {totalEmissions.toFixed(2)} tons
         </span>
-        <div className="flex items-center">
+        <div className="flex items-center mt-3 sm:mt-0">
           {percentageChange > 0 ? (
             <TrendingUp
-              className="h-4 w-4 text-red-500 mr-1"
+              className="h-5 w-5 text-red-500 mr-1"
               aria-label="Increasing trend"
             />
           ) : (
             <TrendingDown
-              className="h-4 w-4 text-green-500 mr-1"
+              className="h-5 w-5 text-green-500 mr-1"
               aria-label="Decreasing trend"
             />
           )}

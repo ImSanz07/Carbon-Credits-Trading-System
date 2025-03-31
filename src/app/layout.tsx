@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import { Toaster as Toaster } from "@/components/ui/toaster"
 import { Toaster as ToasterSonner } from "@/components/ui/sonner"
+import '../app/globals.css'
 
 export const metadata: Metadata = {
   title: "EcoCredits",

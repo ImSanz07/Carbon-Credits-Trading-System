@@ -7,55 +7,46 @@ import GetStartedButton from "./components/GetStartedButton"
 import { Suspense } from "react"
 import Loading from "../loading"
 
+
 export default function LandingPage() {
   return (
     <Suspense fallback={<Loading></Loading>}>
       <div className="flex flex-col min-h-screen bg-green-50">
-        <header className="px-4 lg:px-6 h-32 flex items-center bg-green-700 text-white">
+        <header className="px-4 md:px-6 lg:px-8 h-32 flex items-center bg-green-700 text-white">
           <div className="container mx-auto flex justify-between items-center">
-            <Link className="flex items-center justify-center" href="#">
+            <Link className="flex items-center" href="#">
               <Leaf className="h-8 w-8 mr-2" />
-              <span className="font-bold text-3xl">
+              <span className="font-bold text-xl sm:text-2xl md:text-3xl">
                 Carbon Credits Trading System
               </span>
             </Link>
-            <nav className="flex gap-4 sm:gap-6">
-              <Link
-                className="text-xl font-medium hover:underline underline-offset-4"
-                href="#"
-              >
+            <nav className="hidden md:flex gap-4 sm:gap-6">
+              <Link className="text-lg md:text-xl hover:underline" href="#">
                 Features
               </Link>
-              <Link
-                className="text-xl font-medium hover:underline underline-offset-4"
-                href="#"
-              >
+              <Link className="text-lg md:text-xl hover:underline" href="#">
                 How It Works
               </Link>
-              <Link
-                className="text-xl font-medium hover:underline underline-offset-4"
-                href="#"
-              >
+              <Link className="text-lg md:text-xl hover:underline" href="#">
                 Contact
               </Link>
             </nav>
           </div>
         </header>
+
         <main className="flex-1">
           <section className="relative w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-green-800 text-white bg-[url('/images/homepage-bg.jpg')] bg-cover bg-center">
             <div className="absolute inset-0 bg-black opacity-30"></div>
-            <div className="container mx-auto px-4 md:px-6 relative z-10">
+            <div className="container mx-auto px-4 md:px-6 lg:px-8 relative z-10">
               <div className="flex flex-col items-center space-y-4 text-center">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl text-shadow">
-                    Carbon Credits Trading System
-                  </h1>
-                  <p className="mx-auto max-w-[1200px] text-green-100 text-3npm xl text-shadow">
-                    Empowering farmers and MSMEs to contribute to a sustainable
-                    future through efficient carbon credit trading.
-                  </p>
-                </div>
-                <div className="space-x-4">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter">
+                  Carbon Credits Trading System
+                </h1>
+                <p className="mx-auto max-w-[90%] sm:max-w-[700px] text-lg sm:text-xl md:text-2xl">
+                  Empowering farmers and MSMEs to contribute to a sustainable
+                  future.
+                </p>
+                <div className="flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0">
                   <GetStartedButton />
                   <Button className="text-white border-white hover:bg-green-700">
                     Learn More
@@ -65,12 +56,12 @@ export default function LandingPage() {
             </div>
           </section>
 
-          <section className="w-full -mt-10 py-6 md:py-24 lg:py-32 bg-white">
+          <section className="w-full py-6 md:py-24 lg:py-32 bg-white">
             <div className="container mx-auto px-4 md:px-6">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-8 text-green-800">
                 Key Features
               </h2>
-              <div className="grid gap-6 lg:grid-cols-2">
+              <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
                 <Card className="bg-green-100 border-green-200">
                   <CardHeader>
                     <CardTitle className="text-green-800">
@@ -195,8 +186,9 @@ export default function LandingPage() {
                   <Image
                     src="/images/homepage_bg.webp"
                     alt="Sustainable farming"
-                    layout="fill"
-                    objectFit="cover"
+                    layout="responsive"
+                    width={600}
+                    height={400}
                     className="rounded-lg"
                   />
                 </div>
@@ -254,7 +246,7 @@ export default function LandingPage() {
         <footer className="bg-green-800 text-white">
           <div className="container mx-auto px-4 md:px-6 py-6">
             <div className="flex flex-col sm:flex-row justify-between items-center">
-              <p className="text-xs text-green-100">
+              <p className="text-xs text-green-100 text-center sm:text-left">
                 © 2024 Carbon Credits Trading System. All rights reserved.
               </p>
               <nav className="flex gap-4 sm:gap-6 mt-4 sm:mt-0">
