@@ -78,6 +78,7 @@ const ProductPage: React.FC = () => {
         }
     }, [totalCredits, router, toast]);
 
+    // Function to create order for payment
     const createOrder = async () => {
         setIsLoading(true);
         try {
@@ -122,6 +123,10 @@ const ProductPage: React.FC = () => {
         }
     };
 
+    //New Create Order Function with PhonePe API
+    
+
+    // This function will be called when the payment is successful
     const handlePaymentSuccess = async (orderId: string, response: any) => {
         toast({
             title: "Please wait while we verify your payment...",

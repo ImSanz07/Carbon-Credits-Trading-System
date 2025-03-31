@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -26,7 +25,6 @@ import {
   TrendingUp,
 } from "lucide-react";
 import CompanyDetailsDialog from "./components/CompanyDetailsDialog";
-import { FaRubleSign, FaRupeeSign } from "react-icons/fa";
 
 interface Transaction {
   totalCreditsPurchased: number;
@@ -128,8 +126,6 @@ export default function OrderHistory() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {/* Stats Grid */}
-            {/* Stats Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               <Card className="w-full sm:w-1/2 lg:w-full bg-gradient-to-r from-green-100 to-green-50 shadow-md hover:shadow-lg transition">
                 <CardContent className="flex flex-col items-center justify-center p-4 sm:p-6">
@@ -237,7 +233,7 @@ export default function OrderHistory() {
               </Table>
             </div>
 
-            {/* Card/List View for Mobile */}
+            {/* List View for Mobile */}
             <div className="sm:hidden space-y-4">
               {transactions.map((transaction) => (
                 <Card
