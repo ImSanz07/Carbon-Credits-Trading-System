@@ -122,7 +122,7 @@ const MSMENavbar = () => {
               className="w-full text-white border-white bg-green-700 hover:bg-white hover:text-green-700 transition-all"
               onClick={() => {
                 handleSignOutWithToast();
-                setMenuOpen(false); 
+                setMenuOpen(false);
               }}
             >
               <LogOut className="h-4 w-4 mr-2" />
@@ -160,6 +160,5 @@ const NavItem = ({
     <span className="text-lg">{label}</span>
   </Link>
 );
-
 
 export default MSMENavbar;

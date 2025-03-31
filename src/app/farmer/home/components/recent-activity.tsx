@@ -2,7 +2,7 @@ import { Leaf, TrendingUp } from "lucide-react";
 
 export function RecentActivity() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 bg-white p-6 rounded-md">
       <div className="flex items-center">
         <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 mr-4">
           <Leaf className="h-5 w-5 text-green-700" />
