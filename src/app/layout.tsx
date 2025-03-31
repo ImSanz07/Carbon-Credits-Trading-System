@@ -19,11 +19,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+      </head>
       <body>
         {/* Wrap your app with SessionProvider */}
-        <SessionProvider>
-          {children}
-        </SessionProvider>
+        <SessionProvider>{children}</SessionProvider>
         <Toaster />
         <ToasterSonner />
       </body>
