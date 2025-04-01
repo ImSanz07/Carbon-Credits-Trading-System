@@ -112,10 +112,10 @@ const CarbonEmissions: React.FC<CarbonEmissionsProps> = ({
     const { cx, cy, payload } = props;
     const color =
       payload.emissions > 80
-        ? "#ef4444" // red-500
+        ? "#ef4444" //red
         : payload.emissions > 50
-        ? "#eab308" // yellow-500
-        : chartConfig.emissions.color;
+          ? "#eab308" //yellow
+          : chartConfig.emissions.color;
 
     return (
       <circle
@@ -123,8 +123,9 @@ const CarbonEmissions: React.FC<CarbonEmissionsProps> = ({
         cy={cy}
         r={6}
         fill={color}
-        stroke="white"
+        stroke={"white"}
         strokeWidth={1}
+
       />
     );
   };
@@ -138,9 +139,24 @@ const CarbonEmissions: React.FC<CarbonEmissionsProps> = ({
           <p className="text-sm font-medium text-gray-700">
             <span className="font-bold">Month:</span> {data.month}
           </p>
-          <p className="text-sm text-green-700">
+          {
+            data.emissions > 80 ? (
+              <p className="text-sm text-red-700">
+                <span className="font-bold">Emissions:</span> {data.emissions} tons
+              </p>
+            ) : data.emissions > 50 ? (
+              <p className="text-sm text-yellow-700">
+                <span className="font-bold">Emissions:</span> {data.emissions} tons
+              </p>
+            ) : (
+              <p className="text-sm text-green-700">
+                <span className="font-bold">Emissions:</span> {data.emissions} tons
+              </p>
+            )
+          }
+          {/* <p className="text-sm text-green-700">
             <span className="font-bold">Emissions:</span> {data.emissions} tons
-          </p>
+          </p> */}
         </div>
       );
     }
@@ -185,16 +201,20 @@ const CarbonEmissions: React.FC<CarbonEmissionsProps> = ({
               <Line
                 type="monotone"
                 dataKey="emissions"
-                stroke="url(#colorGradient)"
+                stroke="url(#gradient)"
                 strokeWidth={4}
                 dot={<CustomDot />}
                 connectNulls
               />
               <defs>
-                <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#16a34a" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0.6} />
+                <linearGradient id="gradient" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="green" />
+                  <stop offset={`50%`} stopColor="yellow" />
+                  <stop offset={`80%`} stopColor="red" />
+                  <stop offset={`90%`} stopColor="red" />
+                  <stop offset={`100%`} stopColor="#ff000" />
                 </linearGradient>
+
               </defs>
             </LineChart>
           </ResponsiveContainer>

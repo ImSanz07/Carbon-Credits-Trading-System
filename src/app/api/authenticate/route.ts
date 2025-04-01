@@ -6,14 +6,13 @@ import { MSME } from "@/models/MSME";
 
 export async function POST(req: NextRequest) {
     try {
-        console.log("🔥 [AUTH] Incoming Request");
+        console.log("[AUTH] Incoming Request");
 
         const { userType, identifier, password } = await req.json();
-        console.log("👉 [AUTH] Request Data:", { userType, identifier });
+        console.log("[AUTH] Request Data:", { userType, identifier });
 
-        // Validate input
         if (!userType || !identifier || !password) {
-            console.warn("⚠️ [AUTH] Missing required fields");
+            console.warn("[AUTH] Missing required fields");
             return NextResponse.json(
                 { error: "Missing required fields" },
                 { status: 400 }
@@ -27,46 +26,46 @@ export async function POST(req: NextRequest) {
         let user;
         if (userType === "farmer") {
             user = await Farmer.findOne({ aadharNumber: identifier })
-                .select("+password") // Explicitly include password if excluded by default
+                .select("+password") // Explicitly include password 
                 .lean(); // Convert to plain JavaScript object
-            console.log("👨‍🌾 [DB] Farmer Found:", user);
+            console.log("[DB] Farmer Found:", user);
         } else if (userType === "msme") {
             user = await MSME.findOne({ gstin: identifier })
                 .select("+password")
                 .lean();
-            console.log("🏢 [DB] MSME Found:", user);
+            console.log("[DB] MSME Found:", user);
         } else {
-            console.warn("❌ [AUTH] Invalid user type");
+            console.warn("[AUTH] Invalid user type");
             return NextResponse.json(
                 { error: "Invalid user type" },
                 { status: 400 }
             );
         }
 
-        // Check if user was found
+
         if (!user) {
-            console.warn("❌ [AUTH] User not found");
+            console.warn("[AUTH] User not found");
             return NextResponse.json(
                 { error: "User not found" },
                 { status: 401 }
             );
         }
 
-        // Compare passwords
+        // Password Check
         const isPasswordValid = await compare(password, user.password);
-        console.log("🔐 [AUTH] Password Valid:", isPasswordValid);
+        console.log("[AUTH] Password Valid:", isPasswordValid);
 
         if (!isPasswordValid) {
-            console.warn("❌ [AUTH] Invalid credentials");
+            console.warn("[AUTH] Invalid credentials");
             return NextResponse.json(
                 { error: "Invalid credentials" },
                 { status: 401 }
             );
         }
 
-        // Prepare safe user data
+        // Preparing safe user data
         const { password: _, ...safeUser } = user;
-        console.log("✅ [AUTH] Authenticated User:", safeUser);
+        console.log("[AUTH] Authenticated User:", safeUser);
 
         return NextResponse.json({
             _id: safeUser._id.toString(),
@@ -81,7 +80,7 @@ export async function POST(req: NextRequest) {
             type: userType,
         });
     } catch (error) {
-        console.error("🚨 [AUTH] Authentication error:", error);
+        console.error("[AUTH] Authentication error:", error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }
