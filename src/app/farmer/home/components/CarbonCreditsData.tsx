@@ -131,7 +131,7 @@ const CarbonCreditsData: React.FC<CarbonCreditsDataProps> = ({
         </Card>
 
         {/* Next Month's Projected Credits */}
-        <Card className="shadow-md hover:shadow-xl transition col-span-2">
+        <Card className="shadow-md hover:shadow-xl transition sm:col-span-2 md:col-span-1">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">
               Next Month's Projected Credits
@@ -149,7 +149,7 @@ const CarbonCreditsData: React.FC<CarbonCreditsDataProps> = ({
         </Card>
 
         {/* Current Soil Carbon Level */}
-        <Card className="shadow-md hover:shadow-xl transition col-span-2">
+        <Card className="shadow-md hover:shadow-xl transition sm:col-span-2 md:col-span-1">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">
               Current Soil Carbon Level & Other Data
